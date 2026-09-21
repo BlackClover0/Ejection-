@@ -1,0 +1,2423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Hope Vault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Orbitron:wght@700;800&family=Fredoka+One&family=Inter:wght@400;500;600;700;800&family=Fraunces:wght@600;700;800&family=Chakra+Petch:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 1 — LOCK SCREEN: HTML + CSS
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 2 — LOCK SCREEN: HTML
+     ════════════════════════════════════════════════════════════════════════ -->
+<!-- Lock screen removed — app opens directly; app-level lock is handled
+     by the phone's built-in app locker in the APK build. -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 2 — SIDEBAR: HTML + CSS
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 4 — SIDEBAR: HTML
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+<!-- Sidebar -->
+<aside id="sidebar" class="sidebar-closed">
+  <!-- Sidebar background image layer — shown when custom bg is active -->
+  <div id="sidebarBgLayer" style="display:none;position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
+    <img id="sidebarBgImg" style="width:100%;height:100%;object-fit:cover;opacity:0.35;" src="" alt="">
+    <video id="sidebarBgVid" style="display:none;width:100%;height:100%;object-fit:cover;opacity:0.35;" src="" autoplay loop muted playsinline></video>
+    <div id="sidebarBgOverlay" style="position:absolute;inset:0;background:rgba(0,0,0,0.60);"></div>
+  </div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;height:0;padding:0;box-sizing:border-box;overflow:hidden;background:transparent;">
+
+    <!-- ── Hidden nav container (kept for JS compatibility) ── -->
+    <div id="navContainer" style="display:none;"></div>
+
+    <!-- ── ENTIRE sidebar scrolls as one — header + nav + sections all inside ── -->
+    <div class="sidebar-bottom-scroll" style="flex:1;min-height:0;height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;background:transparent;display:flex;flex-direction:column;">
+
+      <!-- Header: brand + close — scrolls with the page -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:space-between;padding:24px 20px 18px;flex-shrink:0;">
+        <!-- Ambient glow behind brand mark -->
+        <div style="position:absolute;top:-30px;left:-30px;width:160px;height:160px;background:radial-gradient(circle,rgba(200,173,122,0.10),transparent 70%);pointer-events:none;"></div>
+        <h2 id="sidebarBrandLogo" style="position:relative;display:flex;align-items:center;gap:0;background:transparent;">
+          <div style="width:34px;height:34px;border-radius:50%;border:1.5px solid var(--brand-circle-color,rgba(200,173,122,0.55));display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#141414;box-shadow:0 0 0 1px rgba(255,255,255,0.05), 0 4px 14px -4px rgba(0,0,0,0.6);">
+            <span id="sidebarBrandInitial" style="font-family:'Orbitron',sans-serif;font-size:16px;color:var(--brand-circle-color,#c8ad7a);line-height:1;font-weight:700;">h</span>
+          </div>
+          <div id="sidebarBrandDivider" style="width:1px;height:28px;background:linear-gradient(180deg,transparent,var(--brand-divider-color,rgba(200,173,122,0.5)),transparent);margin:0 13px;flex-shrink:0;"></div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;background:transparent;">
+            <span id="sidebarBrandName" style="font-family:'Orbitron',sans-serif;font-size:19px;font-weight:800;letter-spacing:0.12em;line-height:1;color:rgba(255,255,255,0.94);">HOPE</span>
+            <span id="sidebarBrandSub" style="font-family:'Orbitron',sans-serif;font-size:8px;font-weight:600;letter-spacing:0.32em;color:var(--brand-sub-color,rgba(200,173,122,0.75));text-transform:uppercase;line-height:1;">STUDIO</span>
+          </div>
+        </h2>
+        <button onclick="closeSidebar()" style="position:relative;color:rgba(255,255,255,0.55);font-size:1rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:10px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background 0.15s,color 0.15s;" onmouseenter="this.style.background='rgba(255,255,255,0.1)';this.style.color='white'" onmouseleave="this.style.background='rgba(255,255,255,0.05)';this.style.color='rgba(255,255,255,0.55)'">&times;</button>
+      </div>
+
+      <!-- Divider below header -->
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.09),transparent);margin:0 24px;flex-shrink:0;"></div>
+
+      <!-- Gallery / Collections nav -->
+      <!-- top padding matches the vertical offset of the homepage's first dashboard card, so the sidebar's
+           first row lines up with the homepage content instead of sitting higher up during the slide -->
+      <div style="padding:66px 24px 22px;flex-shrink:0;">
+
+        <!-- Two storage cards. Device storage (left accent: pearl) and Cloud storage (gold).
+             Each card opens its own page: Device storage page / Cloud storage page. -->
+        <div class="hp-nav-pill" id="dcStorageCard" onclick="openDeviceStoragePage()" style="--pill-accent:var(--pearl);margin-bottom:14px;cursor:pointer;">
+          <div class="hp-icon-badge accent-2"><i class="fas fa-mobile-screen"></i></div>
+          <div class="dash-wide-body" style="flex:1;min-width:0;">
+            <div class="dash-wide-top">
+              <div id="dcDeviceValue" class="dash-value">0 B</div>
+              <div class="dash-label">device storage</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hp-nav-pill" id="dcCloudCard" onclick="openCloudStoragePage()" style="--pill-accent:var(--gold);cursor:pointer;">
+          <div class="hp-icon-badge accent-1"><i class="fas fa-cloud"></i></div>
+          <div class="dash-wide-body" style="flex:1;min-width:0;">
+            <div class="dash-wide-top">
+              <div id="dcCloudValue" class="dash-value">0 B</div>
+              <div class="dash-label">cloud storage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Footer sections ── -->
+      <!-- ⚠️ Bottom spacing is handled by #sidebar .sidebar-bottom-scroll padding-bottom in CSS. Do NOT add padding-bottom here. -->
+      <div style="flex-shrink:0;">
+
+        <!-- Divider -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.09),transparent);margin:0 24px 22px;"></div>
+
+        <!-- Section: Cloud -->
+        <div class="hp-eyebrow">Cloud</div>
+        <div class="hp-card" style="margin:0 24px 20px;">
+          <div onclick="openCloudModal()" class="hp-row">
+            <div class="hp-icon-badge accent-2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </div>
+            <div class="hp-row-label">Pcloud</div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+          <div onclick="openUploadModal()" class="hp-row">
+            <div class="hp-icon-badge accent-2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </div>
+            <div class="hp-row-label">Upload</div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+          <div onclick="openRetrieveModal()" class="hp-row">
+            <div class="hp-icon-badge accent-2">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </div>
+            <div class="hp-row-label">Retrieve</div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+        </div>
+
+        <!-- Section: Settings -->
+        <div class="hp-eyebrow">Settings</div>
+        <div class="hp-card" style="margin:0 24px 20px;">
+          <div onclick="openDisplaySettings();" class="hp-row">
+            <div class="hp-icon-badge accent-3">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><circle cx="7" cy="6" r="1.6" fill="currentColor" stroke="none"/><circle cx="17" cy="12" r="1.6" fill="currentColor" stroke="none"/><circle cx="11" cy="18" r="1.6" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div class="hp-row-label">Display Settings</div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+        </div>
+
+        <!-- Section: Manage -->
+        <div class="hp-eyebrow">Manage</div>
+        <!-- ⚠️ margin on #sidebarManageSection is set in CSS — do NOT add inline margin here -->
+        <div id="sidebarManageSection" class="hp-card">
+          <div onclick="openBinModal()" class="hp-row">
+            <div class="hp-icon-badge accent-6">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </div>
+            <div class="hp-row-label">Bin <span id="binCountBadge" style="display:none;background:var(--gold);color:#141414;border-radius:50px;font-size:10px;padding:2px 7px;font-weight:800;margin-left:6px;"></span></div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+        </div>
+
+        <!-- PWA Install (shown by JS when available) -->
+        <div id="pwaInstallBtn" onclick="installPWA()" style="display:none;margin:18px 24px 0;">
+          <div class="hp-row" style="background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));border:1px solid rgba(200,173,122,0.25);border-radius:14px;">
+            <div class="hp-icon-badge" style="--badge-bg:rgba(200,173,122,0.14);--badge-border:rgba(200,173,122,0.28);">
+              <i class="fas fa-download" style="font-size:14px;color:var(--gold);"></i>
+            </div>
+            <div class="hp-row-label">Install App</div>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</aside>
+
+
+
+<style>
+    /* ════════════════════════════════════════════════════════════════════════
+       SECTION 4 — SIDEBAR: CSS
+       ════════════════════════════════════════════════════════════════════════ */
+  /* ════════════════════════════════════════════════════════════════════
+     § 2a  SIDEBAR NAV DOTS
+     ════════════════════════════════════════════════════════════════════ */
+
+  /* Sidebar nav dots — continuous gentle glow breathe, never stops */
+  @keyframes dotBreathePink {
+    0%   { opacity: 0.5; box-shadow: 0 0 3px 1px rgba(240,236,224,0.25); }
+    50%  { opacity: 0.95; box-shadow: 0 0 9px 3px rgba(240,236,224,0.6); }
+    100% { opacity: 0.5; box-shadow: 0 0 3px 1px rgba(240,236,224,0.25); }
+  }
+  @keyframes dotBreathePurple {
+    0%   { opacity: 0.5; box-shadow: 0 0 3px 1px rgba(200,173,122,0.25); }
+    50%  { opacity: 0.95; box-shadow: 0 0 9px 3px rgba(200,173,122,0.6); }
+    100% { opacity: 0.5; box-shadow: 0 0 3px 1px rgba(200,173,122,0.25); }
+  }
+  .sidebar-nav-dot {
+    animation: dotBreathePink 2.8s ease-in-out infinite;
+  }
+  /* Gold dot: slightly different speed so they drift independently */
+  .sidebar-nav-dot.dot-albums {
+    animation: dotBreathePurple 3.7s ease-in-out infinite;
+  }
+  /* Cloud badge on card */
+  .cloud-card-badge {
+    position: absolute; bottom: 6px; right: 6px;
+    background: rgba(200,173,122,0.85); color: #141414;
+    font-size: 9px; padding: 2px 6px; border-radius: 20px; font-weight: 800; z-index: 5;
+  }
+  .lock-card-badge {
+    position: absolute; bottom: 6px; left: 6px;
+    background: rgba(240,236,224,0.85); color: #141414;
+    font-size: 9px; padding: 2px 6px; border-radius: 20px; font-weight: 800; z-index: 5;
+  }
+
+  #sidebarBrandLogo, #sidebarBrandLogo > div:last-child,
+  #sidebarBrandName, #sidebarBrandSub { background-color: transparent !important; }
+
+  /* Brand name gradient is applied via inline style and JS (_applyBrandCSS) */
+  #brandName { /* gradient applied inline — do not override with background:none */ }
+
+  /* ══ PERMANENT BRAND FONT SIZES — never overridden by JS or themes ══ */
+  #brandInitial, #sidebarBrandInitial { font-size: 13px !important; }
+  #brandName, #sidebarBrandName       { font-size: 20px !important; }
+  #brandSub,  #sidebarBrandSub        { font-size: 8px !important; }
+  #sidebarBrandSub  { color: var(--brand-sub-color, rgba(200,173,122,0.9)); }
+
+  /* ══ BRAND LOGO ROW — forces horizontal layout in header ══ */
+  #brandLogo.brand-logo-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: nowrap !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    cursor: default;
+    user-select: none;
+    background: transparent !important;
+    gap: 0 !important;
+    max-width: 100% !important;
+  }
+  #brandLogo.brand-logo-row > * {
+    flex-shrink: 0;
+  }
+  #brandLogo.brand-logo-row > div:last-child {
+    flex-shrink: 1 !important;
+    min-width: 0 !important;
+  }
+
+  /* Upload FAB — hidden, replaced by bottom tab bar + button */
+  #uploadFab { display: none !important; }
+
+  /* Favourites strip in header */
+  .fav-sq {
+    width: 30px; height: 30px; border-radius: 8px;
+    flex-shrink: 0; cursor: pointer; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 1.5px solid rgba(255,255,255,0.18);
+    position: relative;
+  }
+  .fav-sq:active { transform: scale(0.88); }
+  .fav-sq img { width:100%; height:100%; object-fit:cover; pointer-events:none; }
+  .fav-sq-empty {
+    border: 1.5px dashed rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.25);
+    font-size: 14px;
+  }
+  body.light #folderSearch { background: rgba(0,0,0,0.05); color: #1a0a2e; border-color: rgba(0,0,0,0.12) !important; }
+  body.light #folderSearch::placeholder { color: rgba(0,0,0,0.3); }
+
+  /* Empty vault state */
+  #emptyState {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 24px 24px 8px; gap: 6px;
+  }
+  .empty-emoji { font-size: 40px; margin-bottom: 6px; opacity: 0.85; }
+  .empty-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; color: rgba(255,255,255,0.88); }
+  .text-sm { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.45); }
+  .mt-1 { margin-top: 4px; }
+
+    /* ══════════════════════════════════════════════════════════════════
+       SIDEBAR-SPECIFIC CSS (merged in from sidebar-classy-1.html)
+       ══════════════════════════════════════════════════════════════════ */
+
+    /* ── Refined glass card system ── */
+    .hp-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.075);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 20px -12px rgba(0,0,0,0.6);
+    }
+    .hp-row {
+      display: flex; align-items: center; gap: 13px;
+      padding: 14px 16px; cursor: pointer; position: relative;
+      transition: background 0.18s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hp-row + .hp-row { border-top: 1px solid rgba(255,255,255,0.055); }
+    .hp-row:active { background: rgba(255,255,255,0.05); }
+    .hp-icon-badge {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--badge-bg, rgba(255,255,255,0.06));
+      border: 1px solid var(--badge-border, rgba(255,255,255,0.08));
+      box-shadow: 0 6px 16px -2px var(--acc-glow, transparent);
+    }
+    .hp-row-label {
+      flex: 1; font-size: 14.5px; font-weight: 700; color: rgba(255,255,255,0.92);
+      font-family: -apple-system,'Nunito',sans-serif; letter-spacing: 0.005em;
+    }
+    .hp-chevron {
+      color: rgba(255,255,255,0.22); font-size: 11px; flex-shrink: 0;
+      transition: transform 0.18s ease, color 0.18s ease;
+    }
+    .hp-row:active .hp-chevron { transform: translateX(2px); color: rgba(255,255,255,0.4); }
+    .hp-eyebrow {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 10.5px; font-weight: 800; color: rgba(255,255,255,0.32);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      font-family: -apple-system,'Nunito',sans-serif;
+      padding: 0 2px 9px 27px;
+    }
+    .hp-eyebrow::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.14), transparent);
+      margin-right: 24px;
+    }
+    /* ── Display Settings page controls ── */
+    .ds-seg-btn {
+      flex: 1; padding: 10px 0; border-radius: 12px; cursor: pointer;
+      font-family: 'Nunito',sans-serif; font-size: 14px; font-weight: 800;
+      color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.08); transition: background 0.15s,border-color 0.15s,color 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .ds-seg-btn.active {
+      color: #141414; background: var(--gold); border-color: var(--gold);
+    }
+    .ds-switch {
+      width: 44px; height: 26px; border-radius: 20px; flex-shrink: 0;
+      background: rgba(255,255,255,0.12); position: relative; transition: background 0.2s;
+    }
+    .ds-switch.on { background: var(--gold); }
+    .ds-switch-knob {
+      position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%;
+      background: white; transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+    }
+    .ds-switch.on .ds-switch-knob { transform: translateX(18px); }
+    /* ── Light mode (Display Settings → Theme) — applied as a filter on
+         <html> in JS (invert + hue-rotate), which flips the whole dark
+         UI to light without needing to re-theme every hardcoded color.
+         Photos/videos/icons get the same filter applied a second time
+         here so the two invert-and-rotate passes cancel out and they
+         keep their true colors; only the chrome around them lightens. ── */
+    html.light-mode img,
+    html.light-mode video {
+      filter: invert(1) hue-rotate(180deg);
+    }
+    .hp-nav-pill {
+      font-family: -apple-system,'Nunito',sans-serif; font-size: 16.5px; font-weight: 700;
+      color: rgba(255,255,255,0.92); letter-spacing: 0.005em;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; padding: 13px 20px; flex: 1;
+      display: flex; align-items: center; gap: 12px;
+      border-left: 3px solid var(--pill-accent, transparent);
+      cursor: pointer; text-align: left; -webkit-tap-highlight-color: transparent;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .hp-nav-pill:active { background: rgba(255,255,255,0.08); }
+    .hp-nav-pill.active {
+      background: linear-gradient(165deg, var(--acc1s), rgba(255,255,255,0.02) 70%);
+      border-color: var(--acc1l);
+    }
+    .hp-nav-pill.active .pill-label { color: #fff; }
+    .hp-nav-pill .hp-icon-badge { width: 32px; height: 32px; border-radius: 9px; font-size: 12.5px; }
+    .pill-label { flex: 1; text-align: left; }
+
+    /* accent-N icon-badge utilities — same foil-ring language as the Home
+       dash-cards, shared by the Sidebar's Cloud/Settings/Manage rows */
+    .hp-icon-badge.accent-1 { --badge-bg: var(--acc1s); --badge-border: var(--acc1l); } .hp-icon-badge.accent-1 i, .hp-icon-badge.accent-1 svg { color: var(--acc1); }
+    .hp-icon-badge.accent-2 { --badge-bg: var(--acc2s); --badge-border: var(--acc2l); } .hp-icon-badge.accent-2 i, .hp-icon-badge.accent-2 svg { color: var(--acc2); }
+    .hp-icon-badge.accent-3 { --badge-bg: var(--acc3s); --badge-border: var(--acc3l); } .hp-icon-badge.accent-3 i, .hp-icon-badge.accent-3 svg { color: var(--acc3); }
+    .hp-icon-badge.accent-4 { --badge-bg: var(--acc4s); --badge-border: var(--acc4l); } .hp-icon-badge.accent-4 i, .hp-icon-badge.accent-4 svg { color: var(--acc4); }
+    .hp-icon-badge.accent-5 { --badge-bg: var(--acc5s); --badge-border: var(--acc5l); } .hp-icon-badge.accent-5 i, .hp-icon-badge.accent-5 svg { color: var(--acc5); }
+    .hp-icon-badge.accent-6 { --badge-bg: var(--acc6s); --badge-border: var(--acc6l); } .hp-icon-badge.accent-6 i, .hp-icon-badge.accent-6 svg { color: var(--acc6); }
+
+    /* ════════════════════════════════════════════════════════════════════
+       SIDEBAR CSS — shell, scroll, backdrop, sidebar actions (§3a)
+       ════════════════════════════════════════════════════════════════════ */
+
+    #sidebar {
+      position: fixed !important;
+      top: 0 !important; left: 0 !important; bottom: 0 !important;
+      width: 100% !important; max-width: 100% !important;
+      height: 100svh !important;
+      z-index: 3000;
+      display: flex !important;
+      flex-direction: column !important;
+      overflow: hidden !important;
+      /* Same ambient background as the homepage/Gallery (body's radial
+         gradients + base color) instead of flat black — so opening the
+         sidebar reads as sliding to a neighboring panel of the same app,
+         not jumping to a separate blank screen. */
+      background:
+        radial-gradient(ellipse 900px 500px at 50% -10%, rgba(200,173,122,0.09), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 50% 110%, rgba(200,173,122,0.05), transparent 60%),
+        var(--bg) !important;
+      isolation: isolate;
+      border-right: none !important;
+      /* Exactly matches #pageSlideTrack's transition below — same speed,
+         same easing curve — so opening/closing the sidebar physically
+         feels like the same track as the Home↔Gallery swipe instead of a
+         separate, differently-tuned animation system. */
+      transition: transform 0.46s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+
+    .sidebar-bottom-scroll {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      scroll-behavior: smooth;
+      /* Same hint used on #pageWrapper for the Photos↔Albums swipe: tells
+         the browser this element's own gesture is vertical panning, so it
+         scrolls natively and immediately instead of waiting on JS to first
+         decide the touch isn't a horizontal close-swipe. */
+      touch-action: pan-y;
+    }
+    .sidebar-bottom-scroll::-webkit-scrollbar { display: none; }
+
+    .sidebar-closed { transform: translateX(-100%); }
+
+    #sidebar .sidebar-bottom-scroll {
+      padding-left: 0; padding-right: 0;
+      /* extra clearance so content isn't hidden behind the now always-visible bottom tab bar */
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 96px) !important;
+    }
+
+    #sidebarBackdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55); z-index: 2999;
+      opacity: 0; transition: opacity 0.3s ease;
+      pointer-events: none !important;
+    }
+    #sidebarBackdrop.visible { opacity: 1; }
+
+    /* ── §3a-1 BASE ── */
+    .sidebar-action {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 10px; cursor: pointer; font-size: 13px;
+      border: 1px solid transparent;
+      background: transparent; color: rgba(255,255,255,0.5); width: 100%; text-align: left;
+      transition: background 0.15s, color 0.15s, border-color 0.18s, box-shadow 0.18s;
+      font-family: -apple-system, 'Nunito', sans-serif; font-weight: 700;
+      outline: none; -webkit-tap-highlight-color: transparent;
+    }
+    .sidebar-action:hover { background: rgba(255,255,255,0.07); color: white; }
+
+    /* ── §3a-2 BIN ── */
+    #sidebarManageSection { margin: 0 24px 20px !important; }
+    .sa-orange:active, .sa-orange:focus,
+    .sa-skyblue:active, .sa-skyblue:focus,
+    .sa-pink:active, .sa-pink:focus,
+    .sa-yellow:active, .sa-yellow:focus,
+    .sa-purple:active, .sa-purple:focus {
+      background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.16); color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    /* ── §3a-5 SECURITY (lock keeps a subtle gold accent) ── */
+    .sa-lock:active, .sa-lock:focus {
+      background: rgba(200,173,122,0.10); border-color: rgba(200,173,122,0.4); color: white;
+      box-shadow: inset 0 1px 0 rgba(200,173,122,0.12);
+    }
+    /* ── §3a-7 PWA ── */
+    #pwaInstallBtn {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)) !important;
+      border: 1px solid rgba(200,173,122,0.25) !important;
+      border-radius: 10px !important;
+    }
+
+
+    /* Sidebar nav row hover */
+    .folder-row { cursor: pointer; transition: background 0.12s; padding: 8px 12px; border-radius: 12px; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .folder-row:hover { background: rgba(255,255,255,0.06); }
+    .nav-no-results { font-size: 12px; color: rgba(255,255,255,0.3); padding: 10px 8px; text-align: center; }
+
+    /* Sidebar nav dot */
+
+
+
+</style>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 5 — EVERYTHING ELSE: CSS (shared/root + misc)
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<style>
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SECTION 1 — SHARED: CSS
+     NOTE: reset/root vars, app shell (#appWrap/header/enc-bar/inputs), page-slider mechanics
+       ════════════════════════════════════════════════════════════════════════ */
+    /* ── CSS VARIABLES & RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      /* ── Locked to the Gold & Pearl accent system — every hue below now
+           resolves to warm gold or pearl/champagne, no rainbow accents ── */
+      --pink:   #f0ece0;
+      --purple: #c8ad7a;
+      --cyan:   #f0ece0;
+      --yellow: #c8ad7a;
+      --orange: #c8ad7a;
+      --gold:   #c8ad7a;
+      --pearl:  #f0ece0;
+      --gold-dim: rgba(200,173,122,0.55);
+      --silver: rgba(255,255,255,0.72);
+      --bg:     #0a0a0c;
+      --card:   #17161a;
+      --border: rgba(255,255,255,0.07);
+      --indigo: #c8ad7a;
+      /* acc1-acc6: same alternating gold / pearl / white rotation used by the
+         Gold & Pearl reference (acc = solid, s = subtle 0.12 wash, l = 0.4 outline) */
+      --acc1: rgba(200,173,122,0.95); --acc2: rgba(240,236,224,0.85); --acc3: rgba(200,173,122,0.65);
+      --acc4: rgba(240,236,224,0.85); --acc5: rgba(200,173,122,0.65); --acc6: rgba(255,255,255,0.88);
+      --acc1s: rgba(200,173,122,0.12); --acc2s: rgba(240,236,224,0.12); --acc3s: rgba(200,173,122,0.12);
+      --acc4s: rgba(240,236,224,0.12); --acc5s: rgba(200,173,122,0.12); --acc6s: rgba(255,255,255,0.16);
+      --acc1l: rgba(200,173,122,0.4); --acc2l: rgba(240,236,224,0.4); --acc3l: rgba(200,173,122,0.4);
+      --acc4l: rgba(240,236,224,0.4); --acc5l: rgba(200,173,122,0.4); --acc6l: rgba(255,255,255,0.4);
+    }
+    html { overscroll-behavior-x: none; overflow-x: hidden; touch-action: pan-y; background: #000; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0; position: relative;
+      background:
+        radial-gradient(ellipse 900px 500px at 50% -10%, rgba(200,173,122,0.09), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 50% 110%, rgba(200,173,122,0.05), transparent 60%),
+        var(--bg);
+      font-family: 'Nunito', sans-serif;
+      color: white;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+      touch-action: pan-y;
+      min-height: 100svh;
+    }
+    /* soft hairline grain so the vault doesn't read as flat black, matching the Gold & Pearl reference */
+    body::after {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    }
+    .hidden { display: none !important; }
+
+    /* ════════════════════════════════════════════════════════════════════
+     ════════════════════════════════════════════════════════════════════ */
+
+  #appWrap {
+    display: block; position: relative; z-index: 2;
+    height: 100svh; overflow: hidden; background: #000000;
+    transition: transform 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center center;
+  }
+  #appWrap.sidebar-pushed { overflow: hidden; pointer-events: none; }
+
+  /* ══ SIDEBAR CSS (shell + actions) ══ */
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+    box-shadow: none;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+  }
+  .vault-logo {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px;
+    background: linear-gradient(135deg, var(--pink), var(--yellow));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+  }
+
+  /* E2E bar */
+  .enc-bar {
+    padding: 9px 20px; font-size: 12px; font-weight: 700;
+    background: rgba(200,173,122,0.06); border-bottom: 1px solid rgba(200,173,122,0.12);
+    color: var(--gold); display: flex; align-items: center; gap: 8px;
+  }
+  .enc-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cyan); animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+
+  /* Form inputs */
+  .vault-input {
+    width: 100%; padding: 11px 14px; border: 1px solid var(--border);
+    border-radius: 12px; font-size: 14px; margin-bottom: 10px; outline: none;
+    transition: border-color 0.15s; background: rgba(255,255,255,0.05);
+    color: white; font-family: 'Nunito', sans-serif; font-weight: 600;
+  }
+  .vault-input:focus { border-color: var(--purple); }
+  .vault-input::placeholder { color: rgba(255,255,255,0.25); }
+  .vault-label { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 4px; display: block; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+  .vault-btn {
+    width: 100%; padding: 12px; border-radius: 50px; border: none; cursor: pointer;
+    font-size: 14px; font-weight: 800; transition: all 0.2s; font-family: 'Nunito', sans-serif;
+  }
+  .vault-btn:hover { transform: translateY(-1px); }
+
+  /* ════════════════════════════════════════════════════════════════════
+     § PAGE SLIDER — two-page swipe gallery (rewritten)
+     Both pages are permanently promoted to their own compositor layer
+     (translateZ(0) + backface-visibility) instead of toggling will-change
+     on touchstart — toggling it on the fly can miss the first drag frame
+     on Android WebView, which is what showed up as a black flash/edge
+     while a page was sliding in. #pageWrapper itself now carries the same
+     solid background as the pages, so even a sub-pixel rounding gap
+     between the two 50%-wide track children reveals the right color
+     instead of a harder black seam.
+     ════════════════════════════════════════════════════════════════════ */
+  #pageWrapper {
+    /* Fixed viewport container — eliminates cross-page height bleeding */
+    height: 100svh;
+    overflow: hidden;
+    position: relative;
+    touch-action: pan-y;
+    overscroll-behavior-x: none;
+    background: var(--bg);
+  }
+  #pageSlideTrack {
+    display: flex;
+    width: 200%;
+    /* Must fill wrapper height so pages can scroll internally */
+    height: 100%;
+    transition: transform 0.46s cubic-bezier(0.22, 1, 0.36, 1);
+    align-items: flex-start;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  #pg1, #pg2 {
+    width: 50%;
+    flex: 0 0 50%;
+    /* Each page = exactly one viewport, scrolls its own content */
+    height: 100%;
+    box-sizing: border-box;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: opacity 0.30s ease;
+    -webkit-overflow-scrolling: touch;
+    /* Hide the native scrollbar — same treatment as every other scroll
+       container in the app (sidebar, folders strip, etc.) */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background: var(--bg);
+    /* Permanently on their own compositor layer — see note above. */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
+  }
+  #pg1::-webkit-scrollbar, #pg2::-webkit-scrollbar { display: none; }
+  /* page-fading: reserved for programmatic switch, no opacity dim — looks glitchy */
+  #pg1.page-fading { opacity: 1; }
+  #pg2.page-fading { opacity: 1; }
+  /* pg1: needs padding-bottom to clear fixed tab bar */
+  #pg1 { padding-bottom: 90px; }
+  /* Gallery grid — edge-to-edge, no side margins */
+  #galleryGrid { margin-left: 0 !important; margin-right: 0 !important; width: 100% !important; }
+  /* pg2: fixed height = viewport minus tab bar (72px), so ALL content is reachable */
+  /* ⚠️  padding-bottom must be >= tab bar height (72px) + safe-area + breathing room.
+         Do NOT reduce this below 96px or the last section gets clipped.               */
+
+    /* ════════════════════════════════════════════════════════════════════════
+       SECTION 6 — EVERYTHING ELSE: CSS
+     NOTE: modals, panels, lightbox, select banner, all-folders sheet
+       ════════════════════════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════════════════
+       PORTED-FROM-FIXED: supplemental CSS for modals/panels whose original
+       styling lived in external lockscreen.css/homescreen.css (not available
+       here). Written fresh against this file's own --pink/--purple/--cyan/
+       --gold/--card/--border variables so it matches the existing look.
+       ════════════════════════════════════════════════════════════════════ */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 8600;
+      align-items: center; justify-content: center; padding: 20px;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 20px; width: 100%; max-width: 400px; box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    }
+    .fs-panel {
+      display: none; position: fixed; inset: 0; z-index: 9200;
+      background: var(--bg); flex-direction: column; overflow: hidden;
+    }
+    .fs-panel.open { display: flex; }
+    /* ══ BIN PAGE — Gold & Pearl ══ */
+    #binModal {
+      background:
+        radial-gradient(ellipse 900px 460px at 50% -8%, rgba(200,173,122,0.10), transparent 62%),
+        radial-gradient(ellipse 700px 460px at 50% 112%, rgba(200,173,122,0.05), transparent 60%),
+        var(--bg);
+    }
+    #binScrollContainer { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; position:relative; background-size:cover; background-position:center; background-repeat:no-repeat; }
+    .bin-header { display:flex; align-items:center; gap:12px; padding:calc(env(safe-area-inset-top,0px) + 16px) 20px 16px; position:relative; }
+    .bin-header::after { content:''; position:absolute; left:20px; right:20px; bottom:0; height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent); }
+    .bin-icon-btn {
+      width:36px; height:36px; border-radius:11px; flex-shrink:0; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; font-size:15px;
+      color:rgba(255,255,255,0.7); background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.09);
+      transition:background .15s, color .15s; -webkit-tap-highlight-color:transparent;
+    }
+    .bin-icon-btn:active { background:rgba(255,255,255,0.1); color:#fff; }
+    .bin-logo { width:32px; height:32px; flex-shrink:0; object-fit:contain; mix-blend-mode:screen; }
+    .bin-logo:not([src]), .bin-logo[src=""] { display:none; }
+    .bin-logo:not([src]) + .bin-brand-divider, .bin-logo[src=""] + .bin-brand-divider { display:none; }
+    .bin-brand-divider { width:1px; height:28px; margin:0 13px; flex-shrink:0; background:linear-gradient(180deg,transparent,rgba(200,173,122,0.5),transparent); }
+    .bin-brand { display:flex; flex-direction:column; gap:5px; min-width:0; }
+    .bin-brand-name { font-family:'Orbitron',sans-serif; font-size:19px; font-weight:800; letter-spacing:0.12em; line-height:1; color:rgba(255,255,255,0.94); }
+    .bin-brand-sub { font-family:'Orbitron',sans-serif; font-size:8px; font-weight:600; letter-spacing:0.32em; line-height:1; color:rgba(200,173,122,0.75); }
+    .bin-summary { margin:18px 20px 0; padding:11px 14px; display:flex; align-items:center; gap:13px; border-left:3px solid var(--gold); }
+    .bin-count-chip {
+      display:inline-block; margin-left:6px; min-width:20px; text-align:center; padding:2px 8px; border-radius:50px;
+      font-family:'Chakra Petch',sans-serif; font-size:11px; font-weight:700; color:var(--gold);
+      background:var(--acc1s); border:1px solid var(--acc1l); vertical-align:1px;
+    }
+    .bin-seg { display:flex; gap:2px; padding:3px; border-radius:11px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.07); flex-shrink:0; }
+    .bin-seg button {
+      width:28px; height:26px; border-radius:8px; border:none; cursor:pointer; background:transparent;
+      color:rgba(255,255,255,0.5); font-family:'Chakra Petch',sans-serif; font-size:12px; font-weight:700;
+      transition:background .15s, color .15s; -webkit-tap-highlight-color:transparent;
+    }
+    .bin-seg button.active { background:var(--gold); color:#141414; }
+    .bin-hint {
+      display:flex; align-items:center; justify-content:center; gap:9px; margin:13px 20px 0;
+      font-size:10.5px; font-weight:700; letter-spacing:0.04em; color:rgba(255,255,255,0.3);
+    }
+    .bin-hint i { width:3px; height:3px; border-radius:50%; background:rgba(200,173,122,0.55); }
+    .bin-empty { text-align:center; padding:84px 0 40px; }
+    .bin-empty-badge {
+      width:84px; height:84px; margin:0 auto 20px; border-radius:26px; display:flex; align-items:center; justify-content:center;
+      font-size:30px; color:var(--acc1); background:var(--acc1s); border:1px solid var(--acc1l);
+      box-shadow:0 14px 34px -10px rgba(200,173,122,0.35), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .bin-empty-title { font-family:'Fraunces',serif; font-size:19px; font-weight:700; color:rgba(255,255,255,0.9); margin-bottom:6px; }
+    .bin-empty-sub { font-size:12.5px; font-weight:600; color:rgba(255,255,255,0.36); }
+    #binFooter {
+      position:absolute; bottom:0; left:0; right:0; z-index:10; pointer-events:none;
+      padding:44px 20px calc(env(safe-area-inset-bottom,0px) + 16px);
+      background:linear-gradient(to top, var(--bg) 35%, transparent);
+    }
+    .bin-empty-btn {
+      pointer-events:auto; width:100%; padding:14px; border-radius:14px; cursor:pointer;
+      text-align:center;
+      font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; letter-spacing:0.02em; color:var(--pearl);
+      background:linear-gradient(180deg, var(--acc1s), rgba(200,173,122,0.04));
+      border:1px solid var(--acc1l); border-left:3px solid var(--gold);
+      box-shadow:0 10px 24px -12px rgba(0,0,0,0.7);
+      transition:background .15s; -webkit-tap-highlight-color:transparent;
+    }
+    .bin-empty-btn i { font-size:13px; color:var(--gold); margin-right:8px; }
+    .bin-empty-btn:active { background:rgba(200,173,122,0.2); }
+    .bin-menu {
+      position:fixed; top:64px; right:20px; min-width:210px; z-index:9801; overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)), #17161a;
+      border:1px solid rgba(200,173,122,0.25); border-radius:16px; box-shadow:0 14px 44px rgba(0,0,0,0.9);
+    }
+    .bin-menu-eyebrow { padding:12px 16px 6px; font-size:10px; font-weight:800; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.32); }
+    .bin-menu-sep { height:1px; margin:0 14px; background:rgba(255,255,255,0.07); }
+    .bin-menu-row { display:flex; align-items:center; gap:10px; padding:12px 16px; cursor:pointer; font-size:13px; font-weight:700; color:#fff; }
+    .bin-menu-row i { font-size:13px; width:16px; text-align:center; color:var(--gold); }
+    .bin-swatch {
+      flex:1; height:38px; border-radius:11px; cursor:pointer; border:1.5px solid rgba(255,255,255,0.15);
+      display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:rgba(255,255,255,0.7);
+    }
+    /* Bin swings up from the bottom-left corner, wherever it is opened from
+       (sidebar, page 2, ...). The close is unchanged, so it keeps a centred origin. */
+    #binModal.open { transform-origin: left bottom; animation: binSwingUp 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+    #binModal.open.closing { transform-origin: 50% 50%; animation: afsSlideOut 0.28s cubic-bezier(0.22,1,0.36,1) forwards; }
+    /* ── Page transitions (open 800ms / close 500ms; the close functions in script.js wait 500ms to match) ──
+       Settle down: Pcloud, Upload, Retrieve (the rows in the sidebar's Cloud section).
+       Zoom in: Device storage + Cloud storage pages (the two cards at the top of the sidebar). */
+    #cloudModal.open, #uploadModal.open, #retrieveModal.open { animation: pmSettleIn 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+    #cloudModal.open.closing, #uploadModal.open.closing, #retrieveModal.open.closing { animation: pmSettleOut 0.5s cubic-bezier(0.4,0,0.7,1) forwards; }
+    #deviceStoragePage.open, #cloudStoragePage.open { animation: pmZoomIn 0.8s cubic-bezier(0.22,1,0.36,1) both; }
+    #deviceStoragePage.open.closing, #cloudStoragePage.open.closing { animation: pmZoomOut 0.5s cubic-bezier(0.4,0,0.7,1) forwards; }
+    .fs-panel-header {
+      display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+      padding: 14px 16px 12px; border-bottom: 1px solid var(--border);
+      padding-top: calc(env(safe-area-inset-top,0px) + 14px);
+    }
+    .fs-back-btn {
+      background: rgba(255,255,255,0.06); border: none; color: white;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .fs-panel-title { font-weight: 800; font-size: 16px; flex: 1; color: white; }
+    .fs-panel-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px; padding-bottom: calc(env(safe-area-inset-bottom,0px) + 24px); }
+    .fs-section-label {
+      display: block; font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; letter-spacing: 0.07em; margin: 4px 0 8px;
+    }
+    .mb-2 { margin-bottom: 8px; }
+    .mr-1 { margin-right: 4px; }
+    .flex { display: flex; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-2 { gap: 8px; }
+    .text-sm { font-size: 13px; }
+    .font-bold { font-weight: 700; }
+
+    /* Select banner (bulk action bar) — floating, no bar background; the
+       count sits right-aligned in its own row above the button row, which
+       lines its right edge up with Cancel (the last/rightmost button). */
+    #selectBanner {
+      display: none; position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom,0px) + 20px);
+      transform: translateX(-50%); z-index: 9700;
+      background: transparent; flex-direction: column; align-items: flex-end; gap: 8px;
+      width: max-content; max-width: 94vw;
+    }
+    #selectBanner.open { display: flex; }
+    #selectBanner .sel-row {
+      display: flex; gap: 8px; flex-wrap: nowrap; max-width: 100%;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    #selectBanner .sel-row::-webkit-scrollbar { display: none; }
+    .sel-action {
+      display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px;
+      border-radius: 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: 'Nunito', sans-serif; -webkit-tap-highlight-color: transparent;
+      white-space: nowrap; box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9700;
+      background: #000; opacity: 0; transition: opacity 0.28s ease;
+    }
+    #lightbox.open { display: block; }
+    #lightbox.lb-visible { opacity: 1; }
+    /* Opening any file spins in (800ms). Every route (media type, folder, subfolder, Bin, search)
+       goes through openLightbox() and this one element. Fill is 'backwards' only, so the normal
+       280ms fade-out on close is untouched. */
+    #lightbox.lb-visible { animation: pmSpinIn 0.8s cubic-bezier(0.22,1,0.36,1) backwards; }
+    #lbDecrypting {
+      display: none; position: absolute; inset: 0; z-index: 6050;
+      align-items: center; justify-content: center; flex-direction: column; gap: 10px;
+      color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 700;
+      background: rgba(0,0,0,0.4);
+    }
+    #lbDecrypting .spin { font-size: 28px; animation: spin 1.2s linear infinite; }
+    #sliderViewport { position: absolute; inset: 0; overflow: hidden; }
+    #sliderTrack { display: flex; height: 100%; transition: transform 0.3s cubic-bezier(.4,0,.2,1); }
+    #sliderTrack.no-transition { transition: none; }
+    .slide {
+      flex: 0 0 100vw; width: 100vw; height: 100%;
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .slide img, .slide video { max-width: 100%; max-height: 100%; object-fit: contain; }
+    #lbInfoOverlay {
+      display: none; position: fixed; inset: 0; z-index: 9900;
+      align-items: flex-end; justify-content: center;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+    }
+    #lbInfoOverlay.open { display: flex; }
+    #lbInfoPanel {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px 20px 0 0; padding: 20px;
+      width: 100%; max-width: 480px; box-shadow: 0 -12px 40px rgba(0,0,0,0.6);
+    }
+    .lb-info-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; font-size: 13px; }
+    .lb-info-row .lb-info-label { color: rgba(255,255,255,0.4); font-weight: 700; width: 90px; flex-shrink: 0; }
+    .lb-info-row .lb-info-val { color: white; font-weight: 600; word-break: break-word; }
+
+    /* Lightbox bottom-sheet menu rows */
+    .lb-sheet-row {
+      display: flex; align-items: center; gap: 13px; padding: 12px 20px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent; font-size: 14.5px; font-weight: 700; color: rgba(255,255,255,0.92);
+      transition: background 0.12s;
+    }
+    .lb-sheet-row:active { background: rgba(255,255,255,0.06); }
+    .lb-sheet-icon {
+      width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    /* Lightbox flat dropdown menu */
+    #lbFlatMenu { display: none; position: fixed; inset: 0; z-index: 9800; }
+    #lbFlatMenu.open { display: block; }
+    #lbFlatMenuBackdrop { position: absolute; inset: 0; }
+    #lbFlatMenuBox {
+      position: fixed; min-width: 190px; background: #1e1e22; border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.85); z-index: 9801;
+    }
+    .lb-flat-row {
+      padding: 12px 16px; font-size: 13px; font-weight: 700; color: white; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lb-flat-row:active { background: rgba(255,255,255,0.06); }
+    .lb-flat-row.danger { color: #f87171; }
+    .lb-flat-row.cancel { color: rgba(255,255,255,0.4); }
+
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+</style>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 5 — EVERYTHING ELSE: HTML (bin panel + app shell open)
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 1 — SHARED: HTML
+     NOTE: File picker, Bin panel, and the app-shell wrapper that Home (§3)
+     and Page 2 (§5) sit inside all live here. Sidebar (§4) is placed right
+     before Home below — it cannot be interleaved between Home and Page 2,
+     since those two must stay direct, uninterrupted siblings inside
+     #pageSlideTrack for the swipe/slide-between-pages mechanism to work.
+     ════════════════════════════════════════════════════════════════════════ -->
+<!-- Hidden global file picker — used by every "Add Files" trigger across the
+     app (homepage, folder detail pages, media-type collection pages). Its
+     onchange handler (_handleFileInputChange) encrypts + stores each file. -->
+<input type="file" id="fileInput" accept="image/*,video/*" multiple style="display:none;" onchange="_handleFileInputChange(event)">
+
+<!-- Bin panel — moved into SHARED (was previously down in the ported-modals block) -->
+<!-- ══ BIN FULL-SCREEN PANEL ══ -->
+<div id="binModal" class="fs-panel">
+
+  <!-- Logo / background picker -->
+  <div id="binLogoBackdrop" onclick="document.getElementById('binLogoMenu').style.display='none';this.style.display='none';" style="display:none;position:fixed;inset:0;z-index:9800;"></div>
+  <div id="binLogoMenu" onclick="event.stopPropagation()" class="bin-menu" style="display:none;">
+    <div class="bin-menu-eyebrow">Choose Icon</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:4px 14px 12px;"></div>
+    <div class="bin-menu-sep"></div>
+    <label class="bin-menu-row">
+      <i class="fas fa-upload"></i>Upload custom
+      <input type="file" accept="image/*" onchange="_binLogoUpload(event)" style="display:none;">
+    </label>
+    <div class="bin-menu-sep"></div>
+    <div class="bin-menu-eyebrow">Background</div>
+    <div style="display:flex;gap:8px;padding:6px 14px 14px;">
+      <div onclick="_setBinBg('black')" class="bin-swatch" style="background:#0a0a0c;">Black</div>
+      <div onclick="_setBinBg('gold')" class="bin-swatch" style="background:radial-gradient(120% 140% at 50% -20%, rgba(200,173,122,0.38), #17130c 70%);border-color:rgba(200,173,122,0.45);color:#f0ece0;">Gold</div>
+    </div>
+  </div>
+
+  <!-- Single scrollable container — header + summary + grid all scroll together -->
+  <div id="binScrollContainer">
+
+    <!-- Header — same brand stack language as the sidebar (logo · divider · NAME / SUB) -->
+    <div id="binScrollHeader" class="bin-header">
+      <button class="bin-icon-btn" onclick="closeBinModal()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+      <div style="display:flex;align-items:center;flex:1;min-width:0;">
+        <img id="binHeaderLogo" src="" class="bin-logo" alt="">
+        <div class="bin-brand-divider"></div>
+        <div class="bin-brand">
+          <span class="bin-brand-name">BIN</span>
+          <span class="bin-brand-sub">TRASH</span>
+        </div>
+      </div>
+      <span id="binCountBadge2" style="display:none;background:var(--gold);color:#141414;border-radius:50px;font-size:11px;padding:3px 10px;font-weight:800;flex-shrink:0;"></span>
+      <button id="binLogoDotBtn" class="bin-icon-btn" aria-label="Options" onclick="event.stopPropagation();var m=document.getElementById('binLogoMenu'),b=document.getElementById('binLogoBackdrop');var o=m.style.display==='block';m.style.display=o?'none':'block';b.style.display=o?'none':'block';">
+        <i class="fas fa-ellipsis-vertical"></i>
+      </button>
+    </div>
+
+    <!-- Summary card: count + grid switcher -->
+    <div class="hp-card bin-summary">
+      <div class="hp-icon-badge accent-1"><i class="fas fa-trash-can" style="font-size:13px;"></i></div>
+      <div class="hp-row-label">Deleted items <span class="bin-count-chip"><span id="binItemCount">0</span></span></div>
+      <div class="bin-seg">
+        <button onclick="setBinGrid(2)" id="binGrid2">2</button>
+        <button onclick="setBinGrid(3)" id="binGrid3">3</button>
+        <button onclick="setBinGrid(4)" id="binGrid4">4</button>
+      </div>
+    </div>
+    <div class="bin-hint">Tap to view <i></i> Hold to restore <i></i> Swipe to delete</div>
+
+    <!-- Photo grid -->
+    <div style="padding:0 20px;box-sizing:border-box;">
+      <div id="binItemList" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding-top:18px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 120px);width:100%;box-sizing:border-box;"></div>
+      <div id="binEmptyMsg" class="bin-empty" style="display:none;">
+        <div class="bin-empty-badge"><i class="fas fa-trash-can"></i></div>
+        <div class="bin-empty-title">Bin is empty</div>
+        <div class="bin-empty-sub">Deleted photos and videos will rest here.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Cloud-delete note: Bin's "Empty"/permanent-delete actions also delete
+       the Pcloud copy automatically whenever Pcloud is connected (☁️ Pcloud
+       in the sidebar) — no separate credentials needed here anymore. -->
+
+  <!-- Floating footer -->
+  <div id="binFooter">
+    <button id="btnEmptyBin" onclick="emptyBin()" class="bin-empty-btn" style="display:none;">
+      <i class="fas fa-trash-can"></i>Empty Bin
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 1 — SHARED: HTML (app shell wrappers)
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="appWrap">
+
+<!-- Main Content -->
+<main style="position:relative;z-index:1;width:100%;max-width:100%;overflow-x:hidden;">
+
+<div id="pageWrapper"><div id="pageSlideTrack">
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 3 — HOMEPAGE (pg1): CSS + HTML
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<style>
+    /* ════════════════════════════════════════════════════════════════════════
+       SECTION 3 — HOMEPAGE (pg1): CSS
+     NOTE: dashboard cards, top stats row, greeting banner
+       ════════════════════════════════════════════════════════════════════════ */
+  /* ════════════════════════════════════════════════════════════════════
+     § 2b  HOMEPAGE DASHBOARD CARDS (date / time / week / storage / files)
+     ════════════════════════════════════════════════════════════════════ */
+  .dash-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    row-gap: 14px; column-gap: 14px; padding: 22px 16px 30px; box-sizing: border-box;
+  }
+  .dash-card {
+    aspect-ratio: 1 / 1; border-radius: 18px; padding: 14px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    background: linear-gradient(165deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 55%), var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+    position: relative; overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0; animation: cardIn 0.5s cubic-bezier(.2,.8,.2,1) forwards;
+    transition: transform .15s ease;
+    /* GPU-promote each card so its border/shadow scrolls via composite instead
+       of being repainted every frame — fixes the flicker/darkening on scroll */
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+  .dash-card:active { transform: scale(0.97); }
+  .dash-card:nth-child(1){ animation-delay: .02s; }
+  .dash-card:nth-child(2){ animation-delay: .06s; }
+  .dash-card:nth-child(3){ animation-delay: .10s; }
+  .dash-card:nth-child(4){ animation-delay: .14s; }
+  .dash-card:nth-child(5){ animation-delay: .18s; }
+  @keyframes cardIn { from{ opacity:0; transform:translateY(8px) translateZ(0); } to{ opacity:1; transform:translateY(0) translateZ(0); } }
+  .dash-card::before{content:''; position:absolute; inset:0; z-index:0; background:radial-gradient(140% 160% at 112% -25%, var(--acc-glow, transparent) 0%, transparent 58%); transition:background 0.4s ease;}
+  .dash-icon{
+    width:32px; height:32px; border-radius:10px; font-size:13px; display:flex; align-items:center; justify-content:center;
+    position:relative; z-index:1; flex-shrink:0; transition:background .35s ease, color .35s ease, border-color .35s ease;
+    border:1px solid transparent; box-shadow:0 6px 16px -2px var(--acc-glow, transparent);
+  }
+  /* ── wide "hero stat" storage card + row-style Bin card, matching the
+       Gold & Pearl reference bento layout ── */
+  .dash-card-wide {
+    grid-column: 1 / -1; aspect-ratio: auto; flex-direction: row; align-items: center;
+    gap: 16px; padding: 18px 20px;
+  }
+  .dash-card-wide .dash-icon { width: 40px; height: 40px; font-size: 15px; border-radius: 12px; }
+  .dash-wide-body { flex: 1; min-width: 0; position: relative; z-index: 1; }
+  .dash-wide-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .dash-wide-top .dash-value { font-size: 20px; }
+  .dash-wide-top .dash-label { font-size: 10.5px; white-space: nowrap; }
+  .dash-pct {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 10px;
+    color: var(--acc-glow-solid, var(--gold)); position: relative; z-index: 1; margin-top: 5px; display: inline-block;
+  }
+  .dash-chevron { position: absolute; top: 14px; right: 14px; z-index: 1; color: rgba(255,255,255,0.2); font-size: 10px; }
+  .dash-card-wide .dash-chevron { top: 18px; right: 20px; }
+  .dash-bin-row { grid-column: 1 / -1; margin: 0; }
+  .hp-row-sub { font-size: 11px; font-family: 'Nunito', sans-serif; font-weight: 600; color: rgba(255,255,255,0.32); margin-right: 2px; white-space: nowrap; }
+
+  /* ── accent mapping — copied straight from the Gold & Pearl reference:
+       a directional "light catching foil/gem" glow per card, keyed by id ── */
+  #dcStorageCard .dash-pct{color:var(--acc2);}
+  /* Storage card is locked to the same height as the "My Folder" pill below it
+     (13px pad ×2 + 32px badge + 2px border = 60px), with the % on the bar row */
+  #dcStorageCard, #dcCloudCard { height: 60px; padding-top: 0; padding-bottom: 0; box-sizing: border-box; }
+  #dcStorageCard .dash-wide-body, #dcCloudCard .dash-wide-body { display: flex; flex-direction: column; justify-content: center; }
+  #dcStorageCard .dash-wide-top .dash-value, #dcCloudCard .dash-wide-top .dash-value { font-size: 18px; }
+  .dash-store-bar-row { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+  .dash-store-bar-row .dash-progress-track { flex: 1; margin-top: 0; width: auto; }
+  .dash-store-bar-row .dash-pct { margin-top: 0; white-space: nowrap; line-height: 1; }
+  #dcCountCard{ --acc-glow:var(--acc1s); }
+  #dcCountCard .dash-icon{background:var(--acc1s); border-color:var(--acc1l); color:var(--acc1);}
+  #dcPinnedCard{ --acc-glow:var(--acc3s); }
+  #dcPinnedCard .dash-icon{background:var(--acc3s); border-color:var(--acc3l); color:var(--acc3);}
+  #dcPickedCard{ --acc-glow:var(--acc4s); }
+  #dcPickedCard .dash-icon{background:var(--acc4s); border-color:var(--acc4l); color:var(--acc4);}
+  #dcFoldersCard{ --acc-glow:var(--acc5s); }
+  #dcFoldersCard .dash-icon{background:var(--acc5s); border-color:var(--acc5l); color:var(--acc5);}
+  #dcBinCard .hp-icon-badge{background:var(--acc6s); border-color:var(--acc6l); --acc-glow:var(--acc6s);}
+  #dcBinCard .hp-icon-badge i{color:var(--acc6);}
+
+  .dash-value {
+    font-family: 'Fraunces', serif; font-weight: 700; line-height: 1; font-size: 19px;
+    color: white; position: relative; z-index: 1;
+  }
+  .dash-sub {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: 11px; color: rgba(255,255,255,0.55);
+    position: relative; z-index: 1; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .dash-label {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 10.5px; color: rgba(255,255,255,0.45);
+    text-transform: uppercase; letter-spacing: 0.04em; position: relative; z-index: 1;
+  }
+  .dash-progress-track {
+    width: 100%; height: 5px; border-radius: 10px; margin-top: 6px;
+    background: rgba(255,255,255,0.08); overflow: hidden; position: relative; z-index: 1;
+  }
+  .dash-progress-fill {
+    height: 100%; border-radius: 10px; width: 0%; transition: width 0.4s ease;
+    background: linear-gradient(90deg, var(--acc2), var(--gold));
+    box-shadow: 0 0 6px rgba(200,173,122,0.4);
+  }
+  body.light .dash-card { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+  body.light .dash-value { color: #1a0a2e; }
+  body.light .dash-sub, body.light .dash-label { color: rgba(0,0,0,0.45); }
+
+  /* ════════════════════════════════════════════════════════════════════
+     § 2c  GREETING BANNER (semi-square)
+     ════════════════════════════════════════════════════════════════════ */
+  /* ── hero greeting — one confident card instead of two identical squares,
+       copied straight from the Gold & Pearl reference ── */
+  #greetingBanner{ margin:18px 16px 0; }
+  .gb-hero{
+    display:flex; align-items:center; gap:16px; border-radius:20px; padding:20px;
+    background:linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0) 60%), var(--card);
+    border:1px solid var(--border); box-shadow:0 16px 38px -10px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.04);
+    position:relative; overflow:hidden;
+  }
+  .gb-hero::before{content:''; position:absolute; inset:0; z-index:0; background:radial-gradient(140% 160% at 88% -30%, var(--acc1s) 0%, transparent 60%); transition:background 0.4s ease;}
+  .gb-icon{
+    width:46px; height:46px; border-radius:14px; font-size:17px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; position:relative; z-index:1; transition:background .35s ease, color .35s ease, border-color .35s ease;
+    box-shadow:0 8px 18px -3px var(--acc-glow, transparent);
+  }
+  .gb-hero-body{ position:relative; z-index:1; min-width:0; }
+  #gbGreeting {
+    font-family:'Fraunces',serif; font-weight:700; font-size:21px;
+    color:rgba(255,255,255,0.96); line-height:1.15;
+  }
+  #gbSub {
+    font-family:'Chakra Petch',sans-serif; font-weight:600; font-size:11px;
+    letter-spacing:0.04em; color:rgba(255,255,255,0.45); margin-top:5px;
+  }
+  #gbHeroCard .gb-icon{ background:var(--acc1s); border:1px solid var(--acc1l); color:var(--acc1); --acc-glow:var(--acc1s); }
+  #dateBanner{ margin:12px 16px 0; }
+  #gbFullDate {
+    font-family:'Fraunces',serif; font-weight:700; font-size:16px;
+    color:rgba(255,255,255,0.9); line-height:1.35; white-space:pre-line;
+  }
+  #gbDateCard .gb-icon{ background:var(--acc2s); border:1px solid var(--acc2l); color:var(--acc2); --acc-glow:var(--acc2s); }
+  body.light #gbFullDate { color: #1a0a2e; }
+  body.light .gb-hero { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+  body.light #gbGreeting { color: #1a0a2e; }
+  body.light #gbSub { color: rgba(0,0,0,0.45); }
+
+  /* ══ CLOUD BAR — one full-width bar at the top of the homepage.
+     Shows whether Pcloud is connected, the latest cloud activity, and an
+     Upload button that sends every local file to Pcloud. ══ */
+  #activityRow { display: block; margin: 14px 16px 0; }
+  .activity-card {
+    display:flex; align-items:center; gap:14px; min-width:0; padding:14px 16px; border-radius:18px;
+    background:linear-gradient(165deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 55%), var(--card);
+    border:1px solid var(--border); box-shadow:0 10px 28px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.03);
+    position:relative; overflow:hidden;
+  }
+  .activity-card::before{content:''; position:absolute; inset:0; z-index:0; background:radial-gradient(130% 150% at 100% -20%, var(--acc-glow, transparent) 0%, transparent 60%); transition:background 0.4s ease;}
+  .activity-card > *{position:relative; z-index:1;}
+  #activityCloudCard{ --acc-glow:var(--acc1s); }
+  #activityCloudCard .gb-icon { background: var(--acc2s); border:1px solid var(--acc2l); color: var(--acc2); flex-shrink: 0; }
+  #activityCloudCard.connected .gb-icon { background: var(--acc1s); border-color: var(--acc1l); color: var(--acc1); }
+  .activity-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:7px; vertical-align:1px; background:rgba(255,255,255,0.28); transition:background .3s, box-shadow .3s; }
+  #activityCloudCard.connected .activity-dot { background:var(--gold); box-shadow:0 0 8px rgba(200,173,122,0.75); }
+  .activity-upload-btn {
+    flex-shrink:0; display:flex; align-items:center; gap:7px; padding:10px 15px; border-radius:12px; cursor:pointer;
+    font-family:'Nunito',sans-serif; font-weight:800; font-size:13px; letter-spacing:0.01em;
+    color:#141414; background:var(--gold); border:none; -webkit-tap-highlight-color:transparent;
+    transition:opacity .2s, transform .15s;
+  }
+  .activity-upload-btn:active { transform:scale(0.96); }
+  #activityCloudCard:not(.connected) .activity-upload-btn { opacity:0.5; }
+  .activity-upload-btn:disabled { opacity:0.7; pointer-events:none; }
+  .activity-upload-btn.busy i { animation: spin 1s linear infinite; }
+  .activity-text {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 15px;
+    color: rgba(255,255,255,0.92); line-height: 1.2;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .activity-time {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 10.5px;
+    color: rgba(255,255,255,0.46); margin-top: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  body.light .activity-card { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+  body.light .activity-text { color: #1a0a2e; }
+  body.light .activity-time { color: rgba(0,0,0,0.45); }
+
+  #foldersStrip::-webkit-scrollbar { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dash-card { animation: none !important; opacity: 1 !important; }
+    * { transition-duration: 0.01ms !important; }
+  }
+
+</style>
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 3 — HOMEPAGE (pg1): HTML
+     ════════════════════════════════════════════════════════════════════════ -->
+  <div id="pg1">
+  <header style="position:relative;top:0;z-index:100;background:transparent !important;backdrop-filter:none !important;-webkit-backdrop-filter:none !important;border-bottom:none !important;padding:8px 22px 14px;box-sizing:border-box;width:100%;display:flex;align-items:center;gap:8px;min-width:0;box-shadow:none !important;">
+    <!-- Independent background layer for header/search bar -->
+    <div id="headerBgLayer" style="display:none;">
+      <img id="headerBgImg" style="display:none;opacity:0.4;" src="" alt="">
+      <video id="headerBgVid" style="display:none;opacity:0.4;" src="" autoplay loop muted playsinline></video>
+      <div id="headerBgOverlay" style="position:absolute;inset:0;background:rgba(0,0,0,0.55);pointer-events:none;backdrop-filter:blur(20px);"></div>
+    </div>
+    <button onclick="toggleSidebar()" id="headerMenuBtn" style="flex-shrink:0;background:none;border:none;color:rgba(255,255,255,0.7);font-size:18px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;">
+      <i class="fas fa-bars"></i>
+    </button>
+    <!-- Back button — shown when inside a folder view -->
+    <button id="headerBackBtn" onclick="_goBackHome()" style="display:none;flex-shrink:0;background:none;border:none;color:rgba(255,255,255,0.7);font-size:18px;width:36px;height:36px;align-items:center;justify-content:center;border-radius:10px;cursor:pointer;">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <!-- ══ BRAND LOGO ══ -->
+    <div id="brandLogo" class="brand-logo-row" style="margin-left:auto !important;flex:0 1 auto !important;padding:4px 4px 4px 16px;">
+      <!-- Circle monogram -->
+      <div id="brandMonogram" style="width:28px;height:28px;border-radius:50%;border:2px solid rgba(200,173,122,0.55);display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#141416;box-shadow:none;transition:all 0.3s;">
+        <span id="brandInitial" style="font-family:'Fraunces',serif;font-size:13px;color:var(--yellow);line-height:1;font-weight:700;display:flex;align-items:center;justify-content:center;width:100%;height:100%;text-align:center;">h</span>
+      </div>
+      <!-- Vertical divider -->
+      <div id="brandDivider" style="width:2px;height:34px;background:linear-gradient(180deg,transparent 0%,rgba(200,173,122,0.4) 30%,rgba(200,173,122,0.4) 70%,transparent 100%);margin:0 12px;flex-shrink:0;opacity:1;transition:all 0.3s;border-radius:2px;"></div>
+      <!-- Wordmark -->
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;background:transparent;min-width:0;overflow:hidden;flex:1;">
+        <span id="brandName" style="font-family:'Fraunces',serif;font-size:20px;font-weight:600;letter-spacing:0.02em;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:rgba(255,255,255,0.92);">Hope</span>
+        <span id="brandSub" style="font-family:'Inter',sans-serif;font-size:8px;font-weight:500;letter-spacing:0.24em;color:rgba(255,255,255,0.4);text-transform:uppercase;line-height:1;white-space:nowrap;">STUDIO</span>
+      </div>
+    </div>
+    <!-- Page title shown when inside a folder (render() writes here) -->
+    <div id="headerTitle" style="display:none;flex:1;min-width:0;font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+    <!-- Favourites & Starred strip hidden -->
+    <div id="favStrip" style="display:none;gap:5px;align-items:center;flex-shrink:0;"></div>
+
+  </header>
+        <div style="width:100%;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.4) 50%,transparent 100%);"></div>
+  <!-- Legacy stats bar — kept in DOM (hidden) for scripts/JS elsewhere that read these ids -->
+  <div id="statsBar" style="display:none;">
+    <span id="statCount">0 items</span>
+    <span id="storageUsageLabel">0 MB</span>
+    <div id="cloudActivePill"></div>
+    <div id="storageUsagePill"></div>
+  </div>
+
+  <!-- Hidden legacy date/time nodes — kept for JS compatibility (dcFullDate/dcWeekday/dcTime still referenced) -->
+  <div style="display:none;">
+    <span id="dcFullDate">April 13, 2025</span>
+    <span id="dcWeekday">Sunday</span>
+    <span id="dcTime">12:30 pm</span>
+  </div>
+
+  <!-- ══ GREETING — one confident hero card, matching the Gold & Pearl reference ══ -->
+  <div id="greetingBanner">
+    <div class="gb-hero" id="gbHeroCard">
+      <div class="gb-icon"><i class="fas fa-moon"></i></div>
+      <div class="gb-hero-body">
+        <div id="gbGreeting">Good night</div>
+        <div id="gbSub"><span id="gbTime">12:30 pm</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DATE CARD — horizontal card below the greeting, shows the full weekday + date ══ -->
+  <div id="dateBanner">
+    <div class="gb-hero" id="gbDateCard">
+      <div class="gb-icon"><i class="fas fa-calendar-day"></i></div>
+      <div class="gb-hero-body">
+        <div id="gbFullDate">Wednesday, 11 July, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HOMEPAGE DASHBOARD CARDS — Gold & Pearl bento layout ══ -->
+  <div id="dashboardCards" class="dash-grid">
+    <!-- File count -->
+    <div class="dash-card" id="dcCountCard">
+      <div class="dash-icon"><i class="fas fa-images"></i></div>
+      <div>
+        <div id="dcCountValue" class="dash-value">0</div>
+        <div class="dash-label">files</div>
+      </div>
+      <i class="fas fa-chevron-right dash-chevron"></i>
+    </div>
+
+    <!-- Pinned — opens the pinned-items folder (wire up: openPinnedFolder) -->
+    <div class="dash-card" id="dcPinnedCard" style="cursor:pointer;" onclick="_goToPinned()">
+      <div class="dash-icon"><i class="fas fa-thumbtack"></i></div>
+      <div>
+        <div class="dash-value">Pinned</div>
+        <div class="dash-label">Quick access</div>
+      </div>
+      <i class="fas fa-chevron-right dash-chevron"></i>
+    </div>
+
+    <!-- Picked files -->
+    <div class="dash-card" id="dcPickedCard" style="cursor:pointer;" onclick="_goToPicked()">
+      <div class="dash-icon"><i class="fas fa-star"></i></div>
+      <div>
+        <div class="dash-value">Picked</div>
+        <div class="dash-label">Picked files</div>
+      </div>
+      <i class="fas fa-chevron-right dash-chevron"></i>
+    </div>
+
+    <!-- My Folders — opens the all-folders page -->
+    <div class="dash-card" id="dcFoldersCard" style="cursor:pointer;" onclick="_goToAllFolders()">
+      <div class="dash-icon"><i class="fas fa-folder-open"></i></div>
+      <div>
+        <div class="dash-value">My Folders</div>
+        <div class="dash-label">View all folders</div>
+      </div>
+      <i class="fas fa-chevron-right dash-chevron"></i>
+    </div>
+  </div>
+
+  <div id="subfolderRow" style="display:none;"></div>
+
+
+  <!-- ══ FOLDERS STRIP — horizontal scroll row (home view only) ══ -->
+  <div id="foldersStrip" style="display:none;overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;padding:10px 10px 4px;scrollbar-width:none;white-space:nowrap;box-sizing:border-box;"></div>
+
+  <!-- Gallery grid — used for both folder tiles (home) and photo cards -->
+  <div id="galleryGrid" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding-top:14px;padding-bottom:4px;box-sizing:border-box;margin-top:8px;"></div>
+  <div id="emptyState">
+  </div>
+
+  </div><!-- end pg1 -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 4 — PAGE 2 (Albums/Collections): HTML + CSS
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 5 — PAGE 2 (Albums/Collections): HTML
+     ════════════════════════════════════════════════════════════════════════ -->
+      <div id="pg2">
+
+        <!-- ── PAGE 2 HEADER ── -->
+        <div class="gal-header">
+          <div class="gal-title">Gallery</div>
+          <!-- Three-dot menu button for folders -->
+          <button onclick="_toggleFolderMenu(event)" id="pg2FolderMenuBtn" class="gal-menu-btn"><i class="fas fa-ellipsis-vertical"></i></button>
+          <!-- Folder options dropdown (anchored to header) -->
+          <div id="pg2FolderMenu" style="display:none;position:absolute;top:calc(100% - 8px);right:16px;z-index:600;background:#2c2c2e;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;min-width:196px;box-shadow:0 8px 32px rgba(0,0,0,0.90);animation:menuPop 0.15s ease;">
+            <div style="padding:8px 16px 3px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Grid</div>
+            <div onclick="_pg2SetGrid(2)" id="pg2Grid2" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-grip-lines" style="font-size:11px;width:16px;text-align:center;"></i>2 Columns</div>
+            <div onclick="_pg2SetGrid(3)" id="pg2Grid3" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-grip" style="font-size:11px;width:16px;text-align:center;"></i>3 Columns</div>
+            <div onclick="_pg2SetGrid(4)" id="pg2Grid4" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-th" style="font-size:11px;width:16px;text-align:center;"></i>4 Columns</div>
+            <div style="height:1px;background:rgba(255,255,255,0.07);margin:0 12px;"></div>
+            <div style="padding:8px 16px 3px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Sort</div>
+            <div onclick="_pg2SetSort('name')" id="pg2SortName" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-arrow-down-a-z" style="font-size:11px;width:16px;text-align:center;"></i>By Name</div>
+            <div onclick="_pg2SetSort('date')" id="pg2SortDate" style="display:flex;align-items:center;gap:11px;padding:9px 16px 13px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-clock-rotate-left" style="font-size:11px;width:16px;text-align:center;"></i>By Upload Date</div>
+          </div>
+        </div>
+
+        <!-- Thin divider matching sidebar header style -->
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.07),transparent);margin:0 16px 0;flex-shrink:0;"></div>
+
+        <!-- ── PINNED (no card bg — opens full collection view on tap) ── -->
+        <div class="gal-section" style="margin-top:18px;">
+          <button class="gal-pinned-row" onclick="_collectGo('starred')" type="button">
+            <span class="gal-pinned-label"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>Pinned</span>
+            <i class="fas fa-chevron-right hp-chevron"></i>
+          </button>
+          <div id="pg2FolderList" class="gal-pin-frame" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-items:start;">
+            <div id="pg2FolderEmpty" class="gal-empty-pill" style="grid-column:1/-1;">
+              <div class="gal-empty-icon"><i class="fas fa-thumbtack"></i></div>
+              <div class="gal-empty-title">No pinned folders yet</div>
+              <div class="gal-empty-sub">Pin one for one-tap access here</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── FOLDERS — My Folders + Picked as square bento tiles, matching the Gold & Pearl reference's Gallery view ── -->
+        <div class="gal-section">
+          <div class="gal-eyebrow">Folders</div>
+          <div id="pg2StarredCard" class="gal-tiles">
+            <div class="dash-card accent-5" style="cursor:pointer;" onclick="openAllFoldersSheet()">
+              <div class="dash-icon"><i class="fas fa-folder-open"></i></div>
+              <div><div id="ccStarredBadge" class="dash-value">0</div><div class="dash-label">folders</div></div>
+              <i class="fas fa-chevron-right dash-chevron"></i>
+            </div>
+            <div class="dash-card accent-4" style="cursor:pointer;" onclick="_collectGo('favourites')">
+              <div class="dash-icon"><svg viewBox="0 0 100 108" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;"><path d="M65.7 10.8 L65.8 43.4 L96.0 55.6 L65.0 65.7 L62.7 98.2 L43.5 71.9 L11.9 79.7 L31.0 53.3 L13.8 25.7 L44.8 35.7 Z" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/></svg></div>
+              <div><div id="ccFavsBadge" class="dash-value">0</div><div class="dash-label">picked</div></div>
+              <i class="fas fa-chevron-right dash-chevron"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MEDIA TYPES ── -->
+        <div class="gal-section">
+          <div class="gal-eyebrow">Media Types</div>
+          <div id="pg2MediaCard" class="hp-card pg2-card-group">
+            <div class="pg2-row hp-row pg2-media-row" onclick="_collectGo('images')">
+              <div class="hp-icon-badge accent-2"><i class="far fa-image"></i></div>
+              <div class="hp-row-label">Images</div>
+              <span id="ccImagesBadge" class="hp-row-badge">0</span>
+              <i class="fas fa-chevron-right hp-chevron"></i>
+            </div>
+            <div class="pg2-row hp-row pg2-media-row" onclick="_collectGo('videos')">
+              <div class="hp-icon-badge accent-1"><i class="fas fa-video"></i></div>
+              <div class="hp-row-label">Videos</div>
+              <span id="ccVideosBadge" class="hp-row-badge">0</span>
+              <i class="fas fa-chevron-right hp-chevron"></i>
+            </div>
+            <div class="pg2-row hp-row pg2-media-row" onclick="_collectGo('gifs')">
+              <div class="hp-icon-badge accent-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width:16px;height:16px;"><path d="M4 3.5 C4 2.5 5 2.2 5.8 2.7 L19 10.2 C19.8 10.7 19.8 11.8 19 12.3 L5.8 19.8 C5 20.3 4 19.9 4 18.9 Z" fill="currentColor"/><path d="M3 14.5 Q10 12.5 20 13.5" fill="none" stroke="#0a0a0c" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div class="hp-row-label">GIFs</div>
+              <span id="ccGifsBadge" class="hp-row-badge">0</span>
+              <i class="fas fa-chevron-right hp-chevron"></i>
+            </div>
+            <div class="pg2-row hp-row pg2-media-row" onclick="_collectGo('webps')">
+              <div class="hp-icon-badge accent-3"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cG9seWdvbiBwb2ludHM9IjUsMyA5Nyw0NyA1LDQ3IiBmaWxsPSIjYzhhZDdhIi8+PHBvbHlnb24gcG9pbnRzPSI1LDk3IDk3LDUzIDUsNTMiIGZpbGw9IiNjOGFkN2EiLz48L3N2Zz4=" style="width:15px;height:15px;object-fit:contain;" alt=""></div>
+              <div class="hp-row-label">WebP</div>
+              <span id="ccWebpsBadge" class="hp-row-badge">0</span>
+              <i class="fas fa-chevron-right hp-chevron"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── MORE ── -->
+        <div class="gal-section" style="margin-bottom:26px;">
+          <div class="gal-eyebrow">More</div>
+          <div id="pg2MoreCard" class="hp-card pg2-card-group">
+            <div id="ccBinTag" class="pg2-row hp-row" onclick="openBinModal()">
+              <div class="hp-icon-badge accent-6"><i class="fas fa-trash"></i></div>
+              <div class="hp-row-label">Bin</div>
+              <span id="ccBinBadge" class="hp-row-badge" style="display:none;"></span>
+              <i class="fas fa-chevron-right hp-chevron"></i>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end pg2 -->
+<style>
+    /* ════════════════════════════════════════════════════════════════════════
+       SECTION 5 — PAGE 2 (Albums/Collections): CSS
+       ════════════════════════════════════════════════════════════════════════ */
+    /* ══════════════════════════════════════════════════════════════════
+       MERGED FROM page2.html — Page 2 (Albums) styles.
+       :root and body rules were dropped (this app's own :root/body
+       above already provide the palette + locked viewport that Page 2
+       relies on) — everything else is carried over as-is.
+       ══════════════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════
+   Extracted from indexcg.html — Page 2 (Albums / Folders / Starred /
+   Media Types / Bin) plus the "All Folders" full-screen sheet.
+   NOTE: This page depends on global app state and helper functions that
+   live in the main app (e.g. the `folders` array, showToast(), toast/
+   sidebar/lightbox logic, showPage(), _renderFolders(), etc.). Those are
+   NOT duplicated here. Dropping this file into the full app (or stubbing
+   the missing globals) is required for full interactivity — as a
+   standalone file it will render the layout but some actions will no-op
+   or throw until wired back up.
+   ══════════════════════════════════════════════════════════════════════ */
+  /* ── FIX: prevent rows collapsing/squishing after back navigation on mobile ── */
+  #pg2 { will-change: scroll-position; }
+
+  /* Lock row heights via padding — WebKit cannot compress padding like it compresses height */
+  #pg2 .pg2-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 14px !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    cursor: pointer;
+    transition: background 0.12s;
+    box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+  }
+  #pg2 .pg2-row:active {
+    background: rgba(255,255,255,0.08) !important;
+    transform: translateZ(0) scale(0.984);
+    transition: transform 0.08s ease, background 0.08s ease;
+  }
+  /* FIX: the grouped list cards (Folders / Media Types / More) clip their rows
+     with overflow:hidden + a visible border, but the rows inside were already
+     promoted to their own compositor layer (transform: translateZ(0) above).
+     A plain, non-promoted border sitting behind promoted children is exactly
+     what makes Android Chrome repaint (and briefly darken) that border on
+     every scroll frame. Promoting the card wrapper itself to match fixes it. */
+  .pg2-card-group {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+  }
+
+  #pg2 {
+    padding: 0 0 calc(env(safe-area-inset-bottom, 0px) + 100px) 0;
+    margin-top: 0;
+    background: radial-gradient(ellipse 320px 200px at 50% 0%, var(--acc1s), transparent 68%), var(--bg);
+    height: 100svh !important;
+    max-height: 100svh !important;
+    overflow-y: scroll !important;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  #pg2::-webkit-scrollbar { display: none; }
+
+  /* ══════════════════════════════════════════════════════════════════
+     GOLD & PEARL — Page 2 (Gallery) reskin, copied from the theme
+     preview (hope-gold-pearl.html). Same hp-card/hp-row/hp-icon-badge
+     language as Home + Sidebar; structure/IDs/onclicks unchanged. ══ */
+  .gal-header { position: relative; display: flex; align-items: center; justify-content: space-between; padding: 20px 16px 14px; }
+  .gal-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 26px; color: rgba(255,255,255,0.96); }
+  .gal-menu-btn {
+    width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+    color: rgba(255,255,255,0.72); display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer; flex-shrink: 0;
+  }
+  .gal-section { padding: 0 16px; margin: 26px 0 0; }
+  .gal-eyebrow {
+    display: flex; align-items: center; gap: 10px; font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.42); margin-bottom: 10px; padding-left: 2px;
+  }
+  .gal-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.14), transparent); }
+  .gal-pinned-row {
+    display: flex; width: 100%; align-items: center; justify-content: space-between; background: none; border: none;
+    padding: 0 6px 12px; cursor: pointer; font: inherit; -webkit-tap-highlight-color: transparent;
+  }
+  .gal-pinned-label {
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 15px; color: rgba(255,255,255,0.95); letter-spacing: 0.02em;
+    text-transform: uppercase; display: flex; align-items: center; gap: 9px;
+  }
+  .gal-pinned-label i { color: var(--gold); font-size: 13px; }
+  .hp-row-badge { font-family: 'Chakra Petch', sans-serif; font-weight: 700; font-size: 12px; color: rgba(255,255,255,0.38); margin-right: 4px; }
+  /* ── Golden dashed frame around the "Pinned" preview area — now lives on
+       the #pg2FolderList container itself so it wraps BOTH the "No pinned
+       folders yet" empty state AND actual pinned folder tiles once a folder
+       is pinned (previously the dashed border only existed on the empty
+       placeholder, so it vanished the moment a folder got pinned). ── */
+  .gal-pin-frame {
+    border-radius: 16px; position: relative; overflow: hidden; padding: 14px;
+    background: linear-gradient(165deg, rgba(255,255,255,0.03), rgba(255,255,255,0) 60%), var(--card);
+    border: 1.5px dashed var(--acc3l);
+  }
+  .gal-empty-pill {
+    display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 4px; text-align: center;
+    color: rgba(255,255,255,0.34); font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 12.5px;
+  }
+  .gal-empty-icon {
+    width: 34px; height: 34px; border-radius: 10px; background: var(--acc3s); border: 1px solid var(--acc3l); color: var(--acc3);
+    display: flex; align-items: center; justify-content: center; font-size: 13px; margin-bottom: 2px;
+  }
+  .gal-empty-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 12.5px; color: rgba(255,255,255,0.6); }
+  .gal-empty-sub { font-family: 'Nunito', sans-serif; font-weight: 600; font-size: 11px; color: rgba(255,255,255,0.32); }
+  /* Folders — square bento tiles (My Folders / Picked), matching the
+     Gold & Pearl reference's Gallery view */
+  .gal-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .dash-card.accent-1 { --acc-glow: var(--acc1s); } .dash-card.accent-1 .dash-icon { background: var(--acc1s); border-color: var(--acc1l); color: var(--acc1); }
+  .dash-card.accent-2 { --acc-glow: var(--acc2s); } .dash-card.accent-2 .dash-icon { background: var(--acc2s); border-color: var(--acc2l); color: var(--acc2); }
+  .dash-card.accent-3 { --acc-glow: var(--acc3s); } .dash-card.accent-3 .dash-icon { background: var(--acc3s); border-color: var(--acc3l); color: var(--acc3); }
+  .dash-card.accent-4 { --acc-glow: var(--acc4s); } .dash-card.accent-4 .dash-icon { background: var(--acc4s); border-color: var(--acc4l); color: var(--acc4); }
+  .dash-card.accent-5 { --acc-glow: var(--acc5s); } .dash-card.accent-5 .dash-icon { background: var(--acc5s); border-color: var(--acc5l); color: var(--acc5); }
+  .dash-card.accent-6 { --acc-glow: var(--acc6s); } .dash-card.accent-6 .dash-icon { background: var(--acc6s); border-color: var(--acc6l); color: var(--acc6); }
+  /* pg2's list cards now use the shared .hp-card / .hp-row look — this just
+     folds the Android anti-flicker fix into that shared background instead
+     of the old flat #1c1c1e panel */
+  .pg2-card-group.hp-card { background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02)); }
+  /* accent-N icon-badge utilities for pg2 rows now live once, globally,
+     alongside the sidebar's copy (see the SIDEBAR CSS block above) */
+  body.light .gal-title { color: #1a0a2e; }
+  body.light .gal-pinned-label { color: rgba(0,0,0,0.8); }
+  body.light .gal-empty-title { color: rgba(0,0,0,0.6); }
+  body.light .gal-empty-sub, body.light .gal-eyebrow { color: rgba(0,0,0,0.4); }
+
+  /* ── Page indicator dots (fixed) ── */
+  /* ══ BOTTOM TAB BAR (iOS-style jet black) ══ */
+  #bottomTabBar {
+    position: fixed; bottom: 16px; left: 0; right: 0; z-index: 3500;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: none; /* only the pill itself (and the floating + button) should be clickable */
+  }
+  #tabBarCenter { pointer-events: auto; }
+  #tabBarCenter {
+    display: flex; align-items: center;
+    background: rgba(24,24,26,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    padding: 5px;
+    gap: 2px;
+  }
+  .tab-btn {
+    padding: 8px 16px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    border: none; cursor: pointer;
+    color: rgba(255,255,255,0.5);
+    background: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .tab-btn.active {
+    background: var(--gold);
+    color: #000;
+    font-weight: 700;
+  }
+  /* Floating "+" — page 2 (Gallery) only, sitting on the right edge just above the bottom bar */
+  #tabBarRight {
+    position: fixed; right: 16px; bottom: 82px; z-index: 3500;
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(24,24,26,0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    display: none; align-items: center; justify-content: center;
+    cursor: pointer; color: #ffffff; font-size: 22px;
+    transition: opacity 0.15s, transform 0.12s;
+    flex-shrink: 0;
+    pointer-events: auto;
+  }
+  #tabBarRight.visible { display: flex; }
+  #tabBarRight:active { opacity: 0.6; transform: scale(0.92); }
+  /* Light mode override */
+  body.light #bottomTabBar { background: #f2f2f7; border-top: 1px solid rgba(0,0,0,0.1); }
+  body.light #tabBarRight { background: #e5e5ea; color: #1c1c1e; }
+  body.light .tab-btn { color: rgba(0,0,0,0.45); }
+  body.light .tab-btn.active { background: #d1d1d6; color: #000000; }
+
+  /* ── Collections Page (Page 2) ── */
+  .pg2-header { padding: 12px 0 16px; }
+  .pg2-title {
+    font-family: 'Fredoka One', cursive; font-size: 26px;
+    background: linear-gradient(135deg, var(--pink), var(--purple), var(--cyan));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    line-height: 1.1;
+  }
+  .pg2-subtitle {
+    font-size: 11px; font-weight: 700;
+    color: rgba(255,255,255,0.3); margin-top: 3px;
+  }
+  .collect-section-label {
+    font-size: 18px; font-weight: 700;
+    color: rgba(255,255,255,0.95);
+    margin: 0 0 10px; display: block;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .collect-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 12px; margin-bottom: 16px;
+  }
+  .collect-card {
+    position: relative; border-radius: 20px; overflow: hidden;
+    cursor: pointer; aspect-ratio: 1 / 1;
+    animation: popIn 0.6s cubic-bezier(.34,1.56,.64,1) both;
+    transition: transform 0.18s cubic-bezier(.34,1.56,.64,1);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .collect-card:active { transform: scale(0.92); }
+  .collect-card-overlay {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(160deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.62) 100%);
+  }
+  .collect-card-body {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    z-index: 2; padding: 12px 14px;
+  }
+  .collect-card-icon { font-size: 30px; display: block; margin-bottom: 3px; }
+  .collect-card-name {
+    font-family: 'Fredoka One', cursive; font-size: 16px;
+    color: white; line-height: 1.1;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.6);
+  }
+  .collect-card-sub { font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.5); margin-top: 1px; }
+  .collect-badge {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    font-size: 10px; font-weight: 800; padding: 3px 8px;
+    border-radius: 20px; color: white;
+  }
+  /* Full-width bin card */
+  .collect-card-full {
+    position: relative; border-radius: 20px; overflow: hidden;
+    cursor: pointer; height: 88px;
+    animation: popIn 0.7s cubic-bezier(.34,1.56,.64,1) both;
+    transition: transform 0.18s cubic-bezier(.34,1.56,.64,1);
+    -webkit-tap-highlight-color: transparent;
+    display: flex; align-items: center; gap: 16px; padding: 0 20px;
+  }
+  .collect-card-full:active { transform: scale(0.97); }
+  .collect-full-icon { font-size: 36px; position: relative; z-index: 2; flex-shrink: 0; }
+  .collect-full-body { position: relative; z-index: 2; flex: 1; min-width: 0; }
+  .collect-full-name { font-family: 'Fredoka One', cursive; font-size: 20px; color: white; }
+  .collect-full-sub { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.45); }
+  .collect-full-arrow { font-size: 16px; color: rgba(255,255,255,0.35); position: relative; z-index: 2; flex-shrink: 0; }
+  .collect-empty-hint {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%; gap: 6px; padding-bottom: 8px;
+  }
+  .collect-empty-ico { font-size: 28px; opacity: 0.45; }
+  .collect-empty-txt { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.28); text-align: center; }
+  body.light .collect-card-sub { color: rgba(0,0,0,0.38); }
+  body.light .collect-full-sub { color: rgba(0,0,0,0.4); }
+  body.light .collect-full-arrow { color: rgba(0,0,0,0.22); }
+  body.light .pg2-subtitle { color: rgba(0,0,0,0.35); }
+  body.light .collect-section-label { color: rgba(0,0,0,0.35); }
+  body.light .collect-empty-txt { color: rgba(0,0,0,0.3); }
+
+  /* Page 2 enhancements — padding set above in the main #pg2 block */
+  #folderSearch::placeholder { color: rgba(255,255,255,0.22); }
+  #pg2StorageSub { transition: color 0.2s; }
+  body.light #folderSearch {
+    background: rgba(0,0,0,0.06);
+    border-color: rgba(0,0,0,0.10);
+    color: #000;
+  }
+  body.light #folderSearch::placeholder { color: rgba(0,0,0,0.3); }
+  body.light #pg2 .pg2-section-cap { color: rgba(0,0,0,0.38); }
+
+    /* All-Folders sheet open/close keyframes (from page2.html) */
+@keyframes afsSlideUp  { from{transform:translateY(6%) scale(0.95);opacity:0} to{transform:translateY(0) scale(1);opacity:1} }
+@keyframes afsSlideOut { from{transform:translateY(0) scale(1);opacity:1} to{transform:translateY(6%) scale(0.97);opacity:0} }
+@keyframes binSwingUp  { from{transform:translateY(70%) rotate(5deg)} to{transform:none} }
+@keyframes pmSettleIn  { from{opacity:0;transform:scale(1.14)} to{opacity:1;transform:none} }
+@keyframes pmSettleOut { from{opacity:1;transform:none} to{opacity:0;transform:scale(1.06)} }
+@keyframes pmZoomIn    { from{opacity:0;transform:scale(.86)} to{opacity:1;transform:none} }
+@keyframes pmZoomOut   { from{opacity:1;transform:none} to{opacity:0;transform:scale(.92)} }
+@keyframes pmSpinIn    { from{opacity:0;transform:rotate(-6deg) scale(.82)} to{opacity:1;transform:none} }
+#allFoldersSearch::placeholder { color:rgba(255,255,255,0.25); }
+#allFoldersPanel { background: #000000; }
+
+/* Gentle full-screen "rise from the bottom" open, used by the Cloud page
+   and the Display Settings page — slower and softer than afsSlideUp
+   above (a true bottom-to-top slide instead of a small 6% nudge), with
+   an ease-out curve that has no bounce so it settles in gently. */
+@keyframes gentleSlideUp { from{transform:translateY(100%);opacity:0.5} to{transform:translateY(0);opacity:1} }
+
+
+</style>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 5 — EVERYTHING ELSE: HTML (app shell close + tab bar + misc panels)
+     ════════════════════════════════════════════════════════════════════════ -->
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 1 — SHARED: HTML (wrapper close + bottom tab bar)
+     ════════════════════════════════════════════════════════════════════════ -->
+
+</div></div><!-- end pageSlideTrack / pageWrapper -->
+
+<!-- ══ DISPLAY DROPDOWN (fixed position — never clipped by overflow) ══ -->
+<div id="displayDropdown" style="display:none;position:fixed;z-index:9000;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 16px;box-shadow:0 8px 40px rgba(0,0,0,0.7);min-width:210px;animation:menuPop 0.15s ease;" onclick="event.stopPropagation()"></div>
+
+</div><!-- end appWrap -->
+<!-- Fix: #appWrap's own closing </div> was missing above (the tag that closed
+     was actually <main>, not #appWrap), so #bottomTabBar and every overlay
+     below it (all-folders sheet, lightbox, modals, etc.) were still nested
+     INSIDE #appWrap. Because #appWrap gets a `transform` applied while the
+     sidebar opens/drags, that transform creates a stacking context + fixed-
+     position containing block for its descendants — trapping the tab bar's
+     z-index:3500 under #appWrap's own z-index:2, so the sidebar (z-index:3000,
+     a true sibling of #appWrap) painted OVER it during the swipe. This extra
+     </div> actually closes #appWrap here, making the tab bar (and everything
+     after it) a real sibling of #sidebar again, so it compares z-index
+     normally and stays on top like it's supposed to. -->
+</div><!-- true end appWrap -->
+<!-- ═══ Bottom tab bar (shared chrome, included for context) ═══ -->
+  <!-- ══ BOTTOM TAB BAR ══ -->
+  <div id="bottomTabBar">
+    <!-- Centre: Sidebar / Home / Gallery -->
+    <div id="tabBarCenter">
+      <button class="tab-btn" id="tabSidebar" onclick="toggleSidebar()">Sidebar</button>
+      <button class="tab-btn active" id="tabPhotos" onclick="_switchTab(0)">Home</button>
+      <button class="tab-btn" id="tabAlbums" onclick="_switchTab(1)">Gallery</button>
+    </div>
+  </div>
+
+  <!-- Floating "+" — only shown on page 2 (Gallery), sits above the bar on the right edge -->
+  <div id="tabBarRight" onclick="_currentTabRightAction()" title="Action">
+    <i class="fas fa-plus" id="tabBarRightIcon"></i>
+  </div>
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 6 — EVERYTHING ELSE: HTML
+     NOTE: sort menus, all-folders sheet, folder modal, select banner, move modal, lightbox, cloud config, storage breakdown. (Bin panel now lives in SECTION 1 — SHARED.)
+     ════════════════════════════════════════════════════════════════════════ -->
+<!-- ═══ Starred / Media sort menus ═══ -->
+<!-- ══ STARRED & FAVOURITES SORT MENU (fixed — never clipped) ══ -->
+<div id="pg2StarredMenu" onclick="event.stopPropagation()" style="display:none;position:fixed;top:0;right:16px;background:#2c2c2e;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;min-width:220px;box-shadow:0 8px 32px rgba(0,0,0,0.90);z-index:9000;animation:menuPop 0.15s ease;">
+  <div style="padding:10px 18px 4px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Sort</div>
+  <div id="pg2StarredSortName" onclick="_pg2StarredSetSort('name')" style="display:flex;align-items:center;gap:13px;padding:12px 18px;cursor:pointer;font-size:15px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-arrow-down-a-z" style="font-size:13px;width:18px;text-align:center;"></i>By Name</div>
+  <div id="pg2StarredSortDate" onclick="_pg2StarredSetSort('date')" style="display:flex;align-items:center;gap:13px;padding:12px 18px 16px;cursor:pointer;font-size:15px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-clock-rotate-left" style="font-size:13px;width:18px;text-align:center;"></i>By Upload Date</div>
+</div>
+
+<!-- ══ MEDIA TYPES SORT MENU (fixed — never clipped) ══ -->
+<div id="pg2MediaMenu" onclick="event.stopPropagation()" style="display:none;position:fixed;top:0;right:16px;background:#2c2c2e;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;min-width:220px;box-shadow:0 8px 32px rgba(0,0,0,0.90);z-index:9000;animation:menuPop 0.15s ease;">
+  <div style="padding:10px 18px 4px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Sort</div>
+  <div id="pg2MediaSortName" onclick="_pg2MediaSetSort('name')" style="display:flex;align-items:center;gap:13px;padding:12px 18px;cursor:pointer;font-size:15px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-arrow-down-a-z" style="font-size:13px;width:18px;text-align:center;"></i>By Name</div>
+  <div id="pg2MediaSortDate" onclick="_pg2MediaSetSort('date')" style="display:flex;align-items:center;gap:13px;padding:12px 18px 16px;cursor:pointer;font-size:15px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-clock-rotate-left" style="font-size:13px;width:18px;text-align:center;"></i>By Upload Date</div>
+</div>
+
+<!-- ═══ All Folders full-screen sheet ═══ -->
+<div id="allFoldersSheet" style="display:none;position:fixed;inset:0;z-index:9500;">
+  <!-- backdrop removed — panel is now solid black fullscreen -->
+
+  <!-- Three-dot menu & backdrop live HERE, outside the animated panel so position:fixed works correctly on mobile -->
+  <div id="afsDotBackdrop" onclick="document.getElementById('afsDotMenu').style.display='none';this.style.display='none';" style="display:none;position:fixed;inset:0;z-index:9998;"></div>
+  <div id="afsDotMenu" onclick="event.stopPropagation()" style="display:none;position:fixed;top:80px;right:16px;background:#2c2c2e;border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;min-width:196px;box-shadow:0 8px 32px rgba(0,0,0,0.90);z-index:9999;">
+    <div onclick="_afsCreateFolder();document.getElementById('afsDotMenu').style.display='none';document.getElementById('afsDotBackdrop').style.display='none';" style="display:flex;align-items:center;gap:11px;padding:12px 16px 11px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.1s;border-bottom:1px solid rgba(255,255,255,0.07);" onmouseenter="this.style.background='#242424'" onmouseleave="this.style.background=''"><i class="fas fa-folder-plus" style="font-size:13px;width:16px;text-align:center;color:#a259ff;"></i>&nbsp;Create Folder</div>
+    <div onclick="_afsDeleteAllFolders();document.getElementById('afsDotMenu').style.display='none';document.getElementById('afsDotBackdrop').style.display='none';" style="display:flex;align-items:center;gap:11px;padding:12px 16px 11px;cursor:pointer;font-size:13px;font-weight:700;color:#ff6b6b;transition:background 0.1s;border-bottom:1px solid rgba(255,255,255,0.07);" onmouseenter="this.style.background='rgba(239,68,68,0.08)'" onmouseleave="this.style.background=''"><i class="fas fa-trash" style="font-size:13px;width:16px;text-align:center;color:#ff6b6b;"></i>&nbsp;Delete All Folders</div>
+    <div style="padding:8px 16px 3px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Grid</div>
+    <div id="afsGrid2Btn" onclick="_afsSetGrid(2)" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-grip-lines" style="font-size:11px;width:16px;text-align:center;"></i>2 Columns</div>
+    <div id="afsGrid3Btn" onclick="_afsSetGrid(3)" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-grip" style="font-size:11px;width:16px;text-align:center;"></i>3 Columns</div>
+    <div id="afsGrid4Btn" onclick="_afsSetGrid(4)" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-th" style="font-size:11px;width:16px;text-align:center;"></i>4 Columns</div>
+    <div style="height:1px;background:rgba(255,255,255,0.07);margin:0 12px;"></div>
+    <div style="padding:8px 16px 3px;font-size:10px;font-weight:800;color:rgba(255,255,255,0.28);letter-spacing:0.08em;text-transform:uppercase;">Sort</div>
+    <div id="afsSortName" onclick="_afsSetSort('name')" style="display:flex;align-items:center;gap:11px;padding:9px 16px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-arrow-down-a-z" style="font-size:11px;width:16px;text-align:center;"></i>By Name</div>
+    <div id="afsSortDate" onclick="_afsSetSort('date')" style="display:flex;align-items:center;gap:11px;padding:9px 16px 13px;cursor:pointer;font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);transition:background 0.1s;" onmouseenter="if(!this.dataset.active)this.style.background='#242424'" onmouseleave="if(!this.dataset.active)this.style.background=''"><i class="fas fa-clock-rotate-left" style="font-size:11px;width:16px;text-align:center;"></i>By Upload Date</div>
+  </div>
+
+  <div id="allFoldersPanel" style="position:absolute;inset:0;display:flex;flex-direction:column;animation:afsSlideUp 0.58s cubic-bezier(0.22,1,0.36,1) both;">
+
+    <!-- Ambient glow bg removed for consistent black bg matching page 2 -->
+
+    <!-- Header bar -->
+    <div style="position:relative;z-index:2;flex-shrink:0;padding:18px 18px 0;">
+      <!-- Back arrow + title row -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <button onclick="closeAllFoldersSheet()" style="background:none;border:none;color:white;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.7));">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div style="flex:1;min-width:0;">
+          <div style="font-family:'Fredoka One',cursive;font-size:26px;line-height:1;color:white;display:flex;align-items:center;gap:10px;"><i class="fas fa-folder-open" style="font-size:20px;color:rgba(255,255,255,0.92);line-height:1;"></i>Folders</div>
+          <div id="allFoldersTotalLabel" style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);margin-top:2px;letter-spacing:0.03em;"></div>
+        </div>
+
+        <!-- Three-dot button only (menu is now outside the animated panel) -->
+        <div style="position:relative;">
+          <button id="afsDotBtn" onclick="var m=document.getElementById('afsDotMenu'),b=document.getElementById('afsDotBackdrop');var open=m.style.display==='block';m.style.display=open?'none':'block';b.style.display=open?'none':'block';event.stopPropagation();" style="background:none;border:none;color:white;font-size:22px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:50%;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.7));">
+            <i class="fas fa-ellipsis-vertical"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search bar -->
+      <div style="position:relative;margin:14px 0 16px;">
+        <i class="fas fa-search" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:13px;pointer-events:none;z-index:1;"></i>
+        <input id="allFoldersSearch" type="text" placeholder="Search folders…"
+          oninput="_allFoldersFilter(this.value)"
+          style="width:100%;padding:11px 14px 11px 38px;border-radius:16px;background:rgba(255,255,255,0.07);border:1.5px solid rgba(255,255,255,0.10);color:white;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;outline:none;box-sizing:border-box;transition:border-color 0.2s,box-shadow 0.2s;"
+          onfocus="this.style.borderColor='rgba(255,255,255,0.18)';this.style.boxShadow='none';"
+          onblur="this.style.borderColor='rgba(255,255,255,0.10)';this.style.boxShadow='none';">
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin-bottom:14px;"></div>
+    </div>
+
+    <!-- Scrollable grid -->
+    <div id="allFoldersGrid" style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px 110px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1;position:relative;z-index:2;align-items:start;align-content:start;">
+      <!-- populated by openAllFoldersSheet() -->
+    </div>
+
+    <!-- Empty state -->
+    <div id="allFoldersEmpty" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;z-index:3;padding:20px;">
+      <div style="font-size:48px;margin-bottom:12px;opacity:0.35;">🔍</div>
+      <div style="font-size:15px;font-weight:800;color:rgba(255,255,255,0.4);">No folders found</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     DISPLAY SETTINGS — dedicated full-screen page (was a "requires full
+     app" placeholder toast; now a real settings page reachable from the
+     sidebar's Settings → Display Settings row).
+     ════════════════════════════════════════════════════════════════════════ -->
+<div id="displaySettingsSheet" style="display:none;position:fixed;inset:0;z-index:9500;">
+  <div id="displaySettingsPanel" style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);animation:afsSlideUp 0.58s cubic-bezier(0.22,1,0.36,1) both;">
+
+    <!-- Header bar -->
+    <div style="position:relative;z-index:2;flex-shrink:0;padding:18px 18px 0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <button onclick="closeDisplaySettings()" style="background:none;border:none;color:white;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;-webkit-tap-highlight-color:transparent;">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div style="flex:1;min-width:0;display:flex;justify-content:flex-end;">
+          <div style="font-family:'Fredoka One',cursive;font-size:26px;line-height:1;color:white;display:flex;align-items:center;gap:10px;"><i class="fas fa-sliders" style="font-size:19px;color:rgba(255,255,255,0.92);line-height:1;"></i>Display Settings</div>
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);margin:14px 0;"></div>
+    </div>
+
+    <!-- Scrollable settings list -->
+    <div style="overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 18px 60px;flex:1;position:relative;z-index:2;">
+
+      <!-- Theme + Brightness -->
+      <div class="hp-eyebrow">Appearance</div>
+      <div class="hp-card" style="margin:0 0 20px;padding:16px;">
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);margin-bottom:3px;">Theme</div>
+        <div style="font-size:11.5px;color:rgba(255,255,255,0.4);margin-bottom:13px;">Switch between dark and light mode.</div>
+        <div style="display:flex;gap:8px;margin-bottom:18px;">
+          <button id="dsThemeDarkBtn" onclick="_dsSetTheme(false)" class="ds-seg-btn"><i class="fas fa-moon" style="margin-right:6px;"></i>Dark</button>
+          <button id="dsThemeLightBtn" onclick="_dsSetTheme(true)" class="ds-seg-btn"><i class="fas fa-sun" style="margin-right:6px;"></i>Light</button>
+        </div>
+
+        <div style="height:1px;background:rgba(255,255,255,0.07);margin-bottom:18px;"></div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.85);">Brightness</div>
+          <div id="dsBrightnessLabel" style="font-size:12px;font-weight:800;color:var(--gold);">100%</div>
+        </div>
+        <div style="font-size:11.5px;color:rgba(255,255,255,0.4);margin-bottom:13px;">Dims or brightens the whole app.</div>
+        <input id="dsBrightnessSlider" type="range" min="50" max="140" step="1" value="100"
+          oninput="_dsSetBrightness(this.value)"
+          style="width:100%;accent-color:var(--gold);">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Shared backdrop for both folder menus -->
+<div id="afsFolderMenuBackdrop" onclick="_afsCloseFolderMenu()" style="display:none;position:fixed;inset:0;z-index:10000;"></div>
+
+<!-- Folder context menu: Rename, Pin, Create Subfolder, Delete -->
+<div id="afsFolderMenu" onclick="event.stopPropagation()" style="display:none;position:fixed;background:#1e1e22;border:1px solid rgba(255,255,255,0.13);border-radius:18px;overflow:hidden;min-width:220px;box-shadow:0 12px 44px rgba(0,0,0,0.92);z-index:10001;">
+  <div id="afsFolderMenuTitle" style="padding:13px 16px 10px;font-size:13px;font-weight:800;color:white;border-bottom:1px solid rgba(255,255,255,0.07);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;"></div>
+  <div onclick="_afsFolderMenuAction('rename')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-pen" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i>Rename</div>
+  <div id="afsFolderMenuStar" onclick="_afsFolderMenuAction('star')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-star" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i><span id="afsFolderMenuStarLabel">Pin Folder</span></div>
+  <div onclick="_afsFolderMenuAction('createSub')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-folder-plus" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i>Create Subfolder</div>
+  <div style="height:1px;background:rgba(255,255,255,0.07);margin:0 12px;"></div>
+  <div onclick="_afsFolderMenuAction('delete')" style="display:flex;align-items:center;gap:12px;padding:12px 16px 13px;cursor:pointer;font-size:13px;font-weight:700;color:#ff6b6b;transition:background 0.12s;" onmouseenter="this.style.background='rgba(239,68,68,0.08)'" onmouseleave="this.style.background=''"><i class="fas fa-trash" style="width:16px;text-align:center;color:#ff6b6b;font-size:13px;"></i>Delete Folder</div>
+</div>
+
+<!-- Subfolder context menu: Rename, Pin, Download All, Delete -->
+<div id="afsSubMenu" onclick="event.stopPropagation()" style="display:none;position:fixed;background:#1e1e22;border:1px solid rgba(255,255,255,0.13);border-radius:18px;overflow:hidden;min-width:220px;box-shadow:0 12px 44px rgba(0,0,0,0.92);z-index:10001;">
+  <div id="afsSubMenuTitle" style="padding:13px 16px 10px;font-size:13px;font-weight:800;color:white;border-bottom:1px solid rgba(255,255,255,0.07);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;"></div>
+  <div onclick="_afsFolderMenuAction('rename')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-pen" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i>Rename</div>
+  <div onclick="_afsFolderMenuAction('star')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-star" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i><span id="afsSubMenuStarLabel">Pin Folder</span></div>
+  <div onclick="_afsFolderMenuAction('download')" style="display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;font-size:13px;font-weight:700;color:white;transition:background 0.12s;" onmouseenter="this.style.background='rgba(255,255,255,0.07)'" onmouseleave="this.style.background=''"><i class="fas fa-download" style="width:16px;text-align:center;color:rgba(255,255,255,0.5);font-size:13px;"></i>Download All</div>
+  <div style="height:1px;background:rgba(255,255,255,0.07);margin:0 12px;"></div>
+  <div onclick="_afsFolderMenuAction('delete')" style="display:flex;align-items:center;gap:12px;padding:12px 16px 13px;cursor:pointer;font-size:13px;font-weight:700;color:#ff6b6b;transition:background 0.12s;" onmouseenter="this.style.background='rgba(239,68,68,0.08)'" onmouseleave="this.style.background=''"><i class="fas fa-trash" style="width:16px;text-align:center;color:#ff6b6b;font-size:13px;"></i>Delete Folder</div>
+</div>
+
+
+<!-- ══ FOLDER NAME MODAL ══ -->
+<div id="folderNameModal" style="display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:24px;">
+  <div id="folderNameModal-bg" style="position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(8px);"></div>
+  <div id="folderNameBox" style="position:relative;z-index:1;background:linear-gradient(180deg, rgba(32,32,34,0.98), rgba(20,20,22,0.98));border-radius:20px;padding:28px 24px 20px;width:100%;max-width:320px;border:1px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px -12px rgba(0,0,0,0.7);">
+    <div id="fnm-title" style="font-size:17px;font-weight:800;margin-bottom:6px;color:white;display:flex;align-items:center;gap:8px;"></div>
+    <div id="fnm-subtitle" style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;"></div>
+    <input id="fnm-input" style="width:100%;padding:13px 15px;border-radius:12px;font-size:15px;font-weight:600;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.1);color:white;outline:none;margin-bottom:14px;font-family:'Nunito',sans-serif;" />
+    <div style="display:flex;gap:10px;">
+      <button id="fnm-cancel" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.08);cursor:pointer;font-weight:700;font-size:14px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.65);font-family:'Nunito',sans-serif;">Cancel</button>
+      <button id="fnm-confirm" style="flex:1;padding:12px;border-radius:12px;border:1px solid rgba(200,173,122,0.4);cursor:pointer;font-weight:700;font-size:14px;color:white;background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));box-shadow:0 6px 18px -6px rgba(0,0,0,0.5);font-family:'Nunito',sans-serif;">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ▓▓▓ PORTED FROM hope-fixed-main-2-1.html — SHARED MODALS ▓▓▓
+     selectBanner, moveModal, lightbox, lbMenuSheet, lbFlatMenu,
+     cloudModal (Pcloud), storageModal — with fresh CSS
+     above since the original external stylesheets weren't available.
+     ▓▓▓ END PORTED MODALS ▓▓▓ -->
+<!-- ══ SELECT BANNER ══ -->
+<div id="selectBanner">
+  <span id="selCount" class="text-sm font-bold" style="color:#ffffff;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;">0 selected</span>
+  <div class="sel-row">
+    <button class="sel-action" style="background:#1a1a1a;color:white;border:1px solid rgba(255,255,255,0.1);" onclick="typeof bulkDownload==='function'?bulkDownload():showToast('Not available yet')"><i class="fas fa-arrow-down" style="font-size:11px;"></i> Download</button>
+    <button class="sel-action" style="background:#1a1a1a;color:white;border:1px solid rgba(255,255,255,0.1);" onclick="typeof openMoveModal==='function'?openMoveModal():showToast('Not available yet')"><i class="fas fa-folder" style="font-size:11px;"></i> Move</button>
+    <button class="sel-action" style="background:#1a1a1a;color:#ff3b3b;border:1px solid rgba(255,255,255,0.1);" onclick="typeof bulkDelete==='function'?bulkDelete():showToast('Not available yet')"><i class="fas fa-trash" style="font-size:11px;"></i> Delete</button>
+    <button class="sel-action" style="background:#1a1a1a;color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.1);padding:9px 12px;" onclick="exitSelectMode()" aria-label="Cancel"><i class="fas fa-times" style="font-size:13px;"></i></button>
+  </div>
+</div>
+
+<!-- ══ MOVE MODAL ══ -->
+<div id="moveModal" class="modal-overlay" style="z-index:9720;">
+  <div class="modal-box" style="padding:0;overflow:hidden;max-height:80vh;display:flex;flex-direction:column;">
+    <!-- Header -->
+    <div id="movePicker_header" style="display:flex;align-items:center;gap:8px;padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;">
+      <button id="movePicker_back" onclick="movePicker_goBack()" style="display:none;background:none;border:none;color:white;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;flex-shrink:0;-webkit-tap-highlight-color:transparent;">
+        <i class="fas fa-arrow-left"></i>
+      </button>
+      <div style="flex:1;min-width:0;">
+        <div id="movePicker_title" style="font-family:'Fredoka One',cursive;font-size:20px;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;line-height:1.2;">Move to Folder</div>
+        <div id="movePicker_subtitle" style="font-size:11px;color:rgba(255,255,255,0.4);font-weight:700;margin-top:2px;"></div>
+      </div>
+    </div>
+    <!-- Folder list -->
+    <div id="folderList" style="overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding:8px 0;"></div>
+    <!-- Cancel -->
+    <button onclick="closeMoveModal()" style="background:none;border:none;border-top:1px solid rgba(255,255,255,0.07);cursor:pointer;color:rgba(255,255,255,0.35);font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;padding:13px;width:100%;flex-shrink:0;-webkit-tap-highlight-color:transparent;">Cancel</button>
+  </div>
+</div>
+
+<!-- ══ LIGHTBOX ══ -->
+<div id="lightbox">
+  <div id="lbDecrypting">
+    <div class="spin">🔓</div>
+    Decrypting…
+  </div>
+
+  <!-- Top bar: back + filename + three-dot -->
+  <div id="lbTopBar" style="position:absolute;top:0;left:0;right:0;z-index:6100;display:flex;align-items:center;justify-content:space-between;padding:12px 14px;padding-top:calc(env(safe-area-inset-top,0px)+12px);pointer-events:auto;">
+    <button onclick="closeLightbox()" style="flex-shrink:0;background:none;border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:opacity 0.15s;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.7));">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <button id="lbMenuBtn" onclick="openLbMenu()" style="flex-shrink:0;background:none;border:none;color:white;width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:opacity 0.15s;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.7));">
+      <i class="fas fa-ellipsis-vertical"></i>
+    </button>
+  </div>
+
+  <!-- Hidden elements kept for JS compatibility -->
+  <div id="lbFileName" style="display:none;"></div>
+  <div id="lbFileInfo" style="display:none;"></div>
+  <div id="lbFavIndicator" style="display:none;"></div>
+  <div id="lbBottomBar" style="display:none;"></div>
+  <i id="lbFavIcon" style="display:none;"></i>
+
+  <div id="sliderViewport">
+    <div id="sliderTrack"></div>
+  </div>
+</div>
+
+<!-- ══ LIGHTBOX MENU SHEET ══ -->
+<div id="lbMenuSheet" style="display:none;position:fixed;inset:0;z-index:9800;">
+  <div id="lbMenuBackdrop" onclick="closeLbMenu()" style="position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);animation:fadeIn 0.2s ease;"></div>
+  <div id="lbMenuPanel" style="position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#1c1a20,#131217);border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,0.09);box-shadow:0 -16px 48px rgba(0,0,0,0.55);padding:8px 0 calc(env(safe-area-inset-bottom,0px)+16px);animation:slideUp 0.28s cubic-bezier(.4,0,.2,1);">
+    <div style="width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,0.16);margin:10px auto 4px;"></div>
+    <!-- File name header -->
+    <div id="lbMenuTitle" style="text-align:center;font-size:14.5px;font-weight:800;color:rgba(255,255,255,0.9);letter-spacing:0.01em;padding:8px 20px 14px;border-bottom:1px solid rgba(255,255,255,0.07);"></div>
+    <!-- Actions -->
+    <div onclick="lbAction_favourite();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(240,236,224,0.14);"><span id="lbMenuFavIcon" style="display:inline-flex;align-items:center;justify-content:center;color:var(--pearl);font-size:inherit;"><svg viewBox="0 0 100 108" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:1em;height:1em;"><path d="M65.7 10.8 L65.8 43.4 L96.0 55.6 L65.0 65.7 L62.7 98.2 L43.5 71.9 L11.9 79.7 L31.0 53.3 L13.8 25.7 L44.8 35.7 Z" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/></svg></span></div>
+      <span id="lbMenuFavLabel">Add to Picked</span>
+    </div>
+    <div onclick="lbAction_move();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(200,173,122,0.14);"><i class="fas fa-folder-open" style="color:var(--gold);"></i></div>
+      <span>Move to Folder</span>
+    </div>
+    <div onclick="lbAction_rename();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(240,236,224,0.14);"><i class="fas fa-pen" style="color:var(--pearl);"></i></div>
+      <span>Rename</span>
+    </div>
+    <div onclick="lbAction_download();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(200,173,122,0.16);"><i class="fas fa-download" style="color:var(--gold);"></i></div>
+      <span>Save / Download</span>
+    </div>
+    <div onclick="lbAction_share();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(240,236,224,0.14);"><i class="fas fa-share-nodes" style="color:var(--pearl);"></i></div>
+      <span>Share</span>
+    </div>
+    <div onclick="lbAction_info();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(255,255,255,0.07);"><i class="fas fa-circle-info" style="color:rgba(255,255,255,0.6);"></i></div>
+      <span>File Info</span>
+    </div>
+    <div style="height:1px;background:rgba(255,255,255,0.07);margin:5px 20px;"></div>
+    <div onclick="lbAction_delete();closeLbMenu();" class="lb-sheet-row">
+      <div class="lb-sheet-icon" style="background:rgba(239,68,68,0.13);"><i class="fas fa-trash" style="color:#ff6b6b;"></i></div>
+      <span style="color:#ff6b6b;">Delete</span>
+    </div>
+    <div onclick="closeLbMenu();" class="lb-sheet-row" style="color:rgba(255,255,255,0.4);">
+      <div class="lb-sheet-icon" style="background:rgba(255,255,255,0.05);"><i class="fas fa-times" style="color:rgba(255,255,255,0.35);"></i></div>
+      <span>Cancel</span>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- ══ LIGHTBOX FLAT DROPDOWN MENU ══ -->
+<div id="lbFlatMenu">
+  <div id="lbFlatMenuBackdrop" onclick="closeLbMenu()"></div>
+  <div id="lbFlatMenuBox">
+    <div onclick="lbAction_favourite();closeLbMenu();" class="lb-flat-row" id="lbFlatFavRow">
+      <span id="lbFlatFavLabel">Add to Picked</span>
+    </div>
+    <div onclick="lbAction_move();closeLbMenu();" class="lb-flat-row">Move to Folder</div>
+    <div onclick="lbAction_rename();closeLbMenu();" class="lb-flat-row">Rename</div>
+    <div onclick="lbAction_download();closeLbMenu();" class="lb-flat-row">Save / Download</div>
+    <div onclick="lbAction_share();closeLbMenu();" class="lb-flat-row">Share</div>
+    <div onclick="lbAction_info();closeLbMenu();" class="lb-flat-row">File Info</div>
+    <div style="height:1px;background:rgba(255,255,255,0.1);"></div>
+    <div onclick="lbAction_delete();closeLbMenu();" class="lb-flat-row danger">Delete</div>
+    <div onclick="closeLbMenu();" class="lb-flat-row cancel">Cancel</div>
+  </div>
+</div>
+
+<!-- ══ CLOUD CONFIG FULL-SCREEN PANEL ══ -->
+<div id="cloudModal" class="fs-panel" style="z-index:9200;">
+  <div class="fs-panel-header">
+    <button class="fs-back-btn" onclick="closeCloudModal()"><i class="fas fa-arrow-left"></i></button>
+    <div style="flex:1;"></div>
+    <div class="cloud-badge" style="margin:0;flex-shrink:0;background:transparent !important;border-color:transparent;color:var(--gold);"><i class="fas fa-cloud"></i> Pcloud</div>
+  </div>
+  <div class="fs-panel-body">
+
+    <!-- Status strip -->
+    <div id="tgStatus" style="display:none;background:var(--acc1s);border:1px solid var(--acc1l);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:12px;font-weight:700;color:var(--gold);align-items:center;gap:8px;">
+      <i class="fas fa-circle-check"></i>
+      <span id="tgStatusText">Connected</span>
+    </div>
+
+    <!-- E2E notice -->
+    <div class="warning-box" style="margin-bottom:16px;border-color:transparent;background:transparent !important;">
+      <i class="fas fa-shield-halved" style="color:var(--gold)"></i>
+      <strong style="color:var(--gold)"> E2E Encrypted.</strong>
+      Files are encrypted with AES-256 on your device before going to Pcloud. They can never see your real photos.
+    </div>
+
+    <!-- Connect -->
+    <span class="fs-section-label">Account</span>
+
+    <!-- App Key — paste it here instead of hand-editing the source file.
+         Pasting a new key and hitting Save replaces the previously saved one. -->
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+      <div style="font-size:11.5px;font-weight:800;color:rgba(255,255,255,0.5);margin-bottom:9px;text-transform:uppercase;letter-spacing:0.06em;">App Key</div>
+      <div style="display:flex;gap:8px;">
+        <input id="pcAppKeyInput" type="text" placeholder="Paste Pcloud App Key" autocomplete="off" autocapitalize="off" spellcheck="false"
+          style="flex:1;min-width:0;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;font-size:12.5px;color:white;font-family:'Nunito',sans-serif;">
+        <button onclick="_pcSaveAppKey()" style="flex-shrink:0;padding:0 18px;border-radius:10px;border:none;background:var(--gold);color:#141414;font-weight:800;font-size:12.5px;cursor:pointer;font-family:'Nunito',sans-serif;-webkit-tap-highlight-color:transparent;">Save</button>
+      </div>
+      <div id="pcAppKeyStatus" style="margin-top:8px;font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);">No App Key saved yet.</div>
+    </div>
+
+    <div id="tgError" style="display:none;color:#f87171;font-size:12px;margin-bottom:8px;font-weight:700;padding:8px 12px;background:rgba(239,68,68,0.1);border-radius:10px;"></div>
+
+    <button class="vault-btn mb-2" style="background:linear-gradient(135deg,var(--gold),var(--pearl));color:#141414;box-shadow:0 4px 20px var(--acc1s);" onclick="pcConnect()">
+      <i class="fas fa-cloud-arrow-up mr-1"></i> Connect Pcloud
+    </button>
+    <button class="vault-btn mb-2" style="background:var(--acc1s);color:var(--gold);border:1px solid var(--acc1l);" onclick="tgTestConnection()">
+      <i class="fas fa-plug mr-1"></i> Test Connection
+    </button>
+
+        <button onclick="tgClearConfig()" style="width:100%;margin-top:4px;padding:10px;background:none;border:none;cursor:pointer;color:#f87171;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;">
+      <i class="fas fa-xmark" style="margin-right:4px;"></i>Disconnect Pcloud
+    </button>
+
+    <!-- Setup guide -->
+    <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:16px;margin-top:20px;border:1px solid var(--border);">
+      <p style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.4);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.07em;">📖 How to set up (2 minutes)</p>
+      <div style="display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;">
+        <span class="step-pill">1</span>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;">Create an app in the <strong style="color:white;">Pcloud App Console</strong> and paste its <strong style="color:var(--gold);">App Key</strong> into the <strong style="color:white;">App Key</strong> box above, then tap <strong style="color:white;">Save</strong>.</p>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;align-items:flex-start;">
+        <span class="step-pill">2</span>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;">Tap <strong style="color:white;">Connect Pcloud</strong> above — a browser tab opens where you log in and approve access. No token to copy or paste.</p>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <span class="step-pill">3</span>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;">Once it says <strong style="color:white;">Connected</strong>, tap <strong style="color:white;">Test Connection</strong>, then open <strong style="color:white;">Upload</strong> from the sidebar to sync. Your files come back automatically when you unlock.</p>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:var(--acc1s);border-radius:8px;font-size:11px;color:var(--gold);font-weight:700;line-height:1.6;">
+        <i class="fas fa-lock" style="margin-right:4px;"></i>
+        Your access token is stored only on this device. Files are AES-256 encrypted before upload — Pcloud only sees scrambled data.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ UPLOAD FULL-SCREEN PANEL ══
+     Sends files waiting on this device to Pcloud (original + thumbnail) and frees the phone space. ══ -->
+<div id="uploadModal" class="fs-panel" style="z-index:9200;">
+  <div class="fs-panel-header">
+    <button class="fs-back-btn" onclick="closeUploadModal()"><i class="fas fa-arrow-left"></i></button>
+    <div class="fs-panel-title" style="margin-left:6px;">Upload</div>
+    <div class="cloud-badge" style="margin:0;flex-shrink:0;background:transparent !important;border-color:transparent;color:var(--gold);"><i class="fas fa-cloud"></i> Pcloud</div>
+  </div>
+  <div class="fs-panel-body">
+
+    <div id="upNote" style="display:none;color:#f87171;font-size:12px;margin-bottom:12px;font-weight:700;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:10px;line-height:1.5;">
+      Pcloud is not connected on this device. Connect it first (sidebar &rarr; Pcloud), then come back here.
+    </div>
+
+    <span class="fs-section-label">Waiting to upload</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Files waiting</span><span id="upStatWaiting" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+    </div>
+    <span class="fs-section-label" style="margin-top:16px;">Will take in Pcloud</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Main files</span><span id="upEstMain" style="color:white;text-align:right;">0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Thumbnails</span><span id="upEstThumbs" style="color:white;text-align:right;">0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Library</span><span id="upEstLib" style="color:white;text-align:right;">0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Total to add</span><span id="upEstTotal" style="color:var(--gold);text-align:right;font-weight:800;">0 B</span></div>
+    </div>
+    <span class="fs-section-label" style="margin-top:16px;">Pcloud storage used</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Files in Pcloud</span><span id="upStatVault" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Pcloud account</span><span id="upStatAccount" style="color:white;text-align:right;">&hellip;</span></div>
+    </div>
+    <div id="upLast" style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);margin-bottom:16px;">Not uploaded from this device yet</div>
+
+    <span class="fs-section-label">What Upload does</span>
+    <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.45);font-weight:700;line-height:1.8;">
+      <div><i class="fas fa-lock" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Main files</strong> &mdash; sent to Pcloud, already encrypted on your device</div>
+      <div><i class="fas fa-image" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Thumbnails</strong> &mdash; sent too, so any device can rebuild your gallery</div>
+      <div><i class="fas fa-list" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Library</strong> &mdash; ids, folders &amp; subfolders are saved in Pcloud</div>
+      <div><i class="fas fa-mobile-screen" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Phone space</strong> &mdash; freed for each file once the library is saved</div>
+    </div>
+
+    <button class="vault-btn mb-2" id="uploadRunBtn"
+      style="background:linear-gradient(135deg,var(--gold),var(--pearl));color:#141414;box-shadow:0 4px 20px var(--acc1s);font-size:15px;padding:14px;"
+      onclick="tgPushAll()">
+      <i class="fas fa-cloud-arrow-up mr-1"></i> Upload to Pcloud
+    </button>
+
+    <!-- Progress box (ids used by the upload code) -->
+    <div id="cloudOpBox" style="display:none;background:var(--acc1s);border:1px solid var(--acc1l);border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:800;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+        <i class="fas fa-rotate" id="cloudOpIcon" style="animation:spin 1s linear infinite;"></i>
+        <span id="cloudOpTitle">Working…</span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-bottom:6px;">
+        <div id="cloudOpBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--pearl));border-radius:4px;transition:width 0.35s ease;"></div>
+      </div>
+      <div id="cloudOpStatus" style="font-size:11px;color:rgba(255,255,255,0.5);font-weight:700;"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ DEVICE STORAGE PAGE (opened by the "device storage" card at the top of the sidebar) ══
+     Only what THIS PHONE holds. Nothing about the cloud lives here. ══ -->
+<div id="deviceStoragePage" class="fs-panel" style="z-index:9200;">
+  <div class="fs-panel-header">
+    <button class="fs-back-btn" onclick="closeDeviceStoragePage()"><i class="fas fa-arrow-left"></i></button>
+    <div class="fs-panel-title" style="margin-left:6px;">Device storage</div>
+  </div>
+  <div class="fs-panel-body">
+
+    <span class="fs-section-label">On this device</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Library &amp; ids</span><span id="stLocLib" style="color:white;text-align:right;">0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Thumbnails</span><span id="stLocThumbs" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Files waiting to upload</span><span id="stLocWaiting" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Caches</span><span id="stLocCache" style="color:white;text-align:right;">0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Total on device</span><span id="stLocTotal" style="color:var(--gold);text-align:right;font-weight:800;">0 B</span></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+      <button onclick="storageClearCaches()" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 6px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.28);border-radius:12px;color:#f87171;font-family:'Nunito',sans-serif;font-weight:800;font-size:11.5px;line-height:1.2;cursor:pointer;text-align:center;"><i class="fas fa-broom" style="font-size:16px;"></i><span>Clear caches</span></button>
+      <button onclick="storageClearLibrary()" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 6px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.28);border-radius:12px;color:#f87171;font-family:'Nunito',sans-serif;font-weight:800;font-size:11.5px;line-height:1.2;cursor:pointer;text-align:center;"><i class="fas fa-list" style="font-size:16px;"></i><span>Clear library</span></button>
+      <button onclick="storageClearThumbnails()" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:12px 6px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.28);border-radius:12px;color:#f87171;font-family:'Nunito',sans-serif;font-weight:800;font-size:11.5px;line-height:1.2;cursor:pointer;text-align:center;"><i class="fas fa-image" style="font-size:16px;"></i><span>Clear thumbnails</span></button>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);line-height:1.6;margin-bottom:4px;">These buttons only clear what is saved on this device.</div>
+
+    <span class="fs-section-label" style="margin-top:16px;">About device storage</span>
+    <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.45);font-weight:700;line-height:1.8;">
+      <div><i class="fas fa-mobile-screen" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">On device</strong> &mdash; what this phone holds: the library list, thumbnails, files not yet uploaded, and caches.</div>
+      <div><i class="fas fa-hourglass-half" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Files waiting to upload</strong> &mdash; encrypted files that only exist on this phone until you upload them. Uploading frees this space.</div>
+      <div><i class="fas fa-clock-rotate-left" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Caches</strong> &mdash; copies of files you opened lately so they open again instantly. No size limit, so they keep growing as you open files.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ CLOUD STORAGE PAGE (opened by the "cloud storage" card at the top of the sidebar) ══
+     Only what is stored in Pcloud. Nothing about this device lives here. ══ -->
+<div id="cloudStoragePage" class="fs-panel" style="z-index:9200;">
+  <div class="fs-panel-header">
+    <button class="fs-back-btn" onclick="closeCloudStoragePage()"><i class="fas fa-arrow-left"></i></button>
+    <div class="fs-panel-title" style="margin-left:6px;">Cloud storage</div>
+  </div>
+  <div class="fs-panel-body">
+
+    <span class="fs-section-label">In the cloud (Pcloud)</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Main files</span><span id="stCloudMain" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Thumbnails</span><span id="stCloudThumbs" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Library</span><span id="stCloudLib" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Total in cloud</span><span id="stCloudTotal" style="color:var(--gold);text-align:right;font-weight:800;">0 B</span></div>
+    </div>
+
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Pcloud account used</span><span id="stCloudAccount" style="color:white;text-align:right;">&hellip;</span></div>
+    </div>
+
+    <div id="stTypesWrap" style="display:none;">
+      <span class="fs-section-label" style="margin-top:16px;">Main files in the cloud, by type</span>
+      <div id="stTypes" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;"></div>
+    </div>
+
+    <span class="fs-section-label" style="margin-top:16px;">About cloud storage</span>
+    <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.45);font-weight:700;line-height:1.8;">
+      <div><i class="fas fa-cloud" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">In the cloud</strong> &mdash; what is stored in Pcloud: your main files, their thumbnails, and the library list.</div>
+      <div><i class="fas fa-user" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Pcloud account used</strong> &mdash; the space used across your whole Pcloud account.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ RETRIEVE FULL-SCREEN PANEL ══
+     Pulls the library index (ids, folders) and thumbnails from Pcloud onto this device.
+     Main files are NOT downloaded here — they stay in Pcloud and open when tapped. ══ -->
+<div id="retrieveModal" class="fs-panel" style="z-index:9200;">
+  <div class="fs-panel-header">
+    <button class="fs-back-btn" onclick="closeRetrieveModal()"><i class="fas fa-arrow-left"></i></button>
+    <div class="fs-panel-title" style="margin-left:6px;">Retrieve</div>
+    <div class="cloud-badge" style="margin:0;flex-shrink:0;background:transparent !important;border-color:transparent;color:var(--gold);"><i class="fas fa-cloud"></i> Pcloud</div>
+  </div>
+  <div class="fs-panel-body">
+
+    <div id="rtNote" style="display:none;color:#f87171;font-size:12px;margin-bottom:12px;font-weight:700;padding:10px 12px;background:rgba(239,68,68,0.1);border-radius:10px;line-height:1.5;">
+      Pcloud is not connected on this device. Connect it first (sidebar → Pcloud), then come back here.
+    </div>
+
+    <span class="fs-section-label">On this device</span>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:6px 14px;margin-bottom:12px;">
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Thumbnails</span><span id="rtStatThumbs" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Library</span><span id="rtStatLib" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>Main files</span><span id="rtStatMain" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <div style="display:flex;justify-content:space-between;gap:12px;padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,0.6);"><span>In Pcloud (total)</span><span id="rtStatCloud" style="color:white;text-align:right;">0 &middot; 0 B</span></div>
+    </div>
+    <div id="rtLast" style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.35);margin-bottom:16px;">Not retrieved on this device yet</div>
+
+    <span class="fs-section-label">What Retrieve does</span>
+    <div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:rgba(255,255,255,0.45);font-weight:700;line-height:1.8;">
+      <div><i class="fas fa-list" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Library</strong> — file ids, names, folders &amp; subfolders</div>
+      <div><i class="fas fa-image" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Thumbnails</strong> — saved on this device</div>
+      <div><i class="fas fa-cloud" style="color:var(--gold);width:16px;"></i> <strong style="color:rgba(255,255,255,0.7);">Main files</strong> — NOT downloaded; they stay in Pcloud and open when you tap them</div>
+    </div>
+
+    <button class="vault-btn mb-2" id="rtRunBtn"
+      style="background:linear-gradient(135deg,var(--gold),var(--pearl));color:#141414;box-shadow:0 4px 20px var(--acc1s);font-size:15px;padding:14px;"
+      onclick="retrieveRun()">
+      <i class="fas fa-cloud-arrow-down mr-1"></i> Retrieve from Pcloud
+    </button>
+    <button id="rtStopBtn" onclick="retrieveStop()" style="display:none;width:100%;margin-bottom:10px;padding:10px;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:12px;cursor:pointer;color:rgba(255,255,255,0.6);font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;">Stop</button>
+
+    <div id="rtBox" style="display:none;background:var(--acc1s);border:1px solid var(--acc1l);border-radius:12px;padding:12px 14px;margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:800;color:var(--gold);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+        <i class="fas fa-rotate" id="rtIcon"></i>
+        <span id="rtTitle">Working…</span>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-bottom:6px;">
+        <div id="rtBar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),var(--pearl));border-radius:4px;transition:width 0.35s ease;"></div>
+      </div>
+      <div id="rtStatus" style="font-size:11px;color:rgba(255,255,255,0.5);font-weight:700;line-height:1.6;"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ STORAGE BREAKDOWN MODAL ══ -->
+<div id="storageModal" class="modal-overlay" style="z-index:8600;">
+  <div class="modal-box" style="width:380px;max-height:90vh;overflow-y:auto;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <h3 style="font-family:'Fredoka One',cursive;font-size:20px;background:linear-gradient(135deg,var(--green),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;">📦 Storage Breakdown</h3>
+      <button onclick="closeStorageBreakdown()" style="color:rgba(255,255,255,0.4);font-size:1.3rem;background:none;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <!-- Total usage bar -->
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;">
+        <span style="font-size:12px;font-weight:800;color:rgba(255,255,255,0.5);letter-spacing:0.07em;text-transform:uppercase;">Total Used</span>
+        <span id="sbTotalLabel" style="font-size:15px;font-weight:800;color:white;">0 MB</span>
+      </div>
+    </div>
+    <!-- Breakdown rows -->
+    <div style="display:flex;flex-direction:column;gap:10px;" id="sbRows">
+      <!-- Rows injected by JS -->
+    </div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--border);font-size:11px;color:rgba(255,255,255,0.3);line-height:1.7;font-weight:700;">
+      Storage is tracked from uploaded file sizes. Cloud storage is provided by Pcloud.
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════════════
+     SECTION 5 — EVERYTHING ELSE: JS
+     ════════════════════════════════════════════════════════════════════════ -->
+<!-- Pcloud's official JS SDK — provides oauth.initOauthPollToken(), the
+     real (maintained) implementation of the poll-based login flow used by
+     pcConnect() in app.js. Loaded before app.js so window.pCloudSDK exists
+     when pcConnect() runs. -->
+<script src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
+<script src="persistence-encryption.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
